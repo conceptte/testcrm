@@ -5,9 +5,16 @@ namespace Mtr\MiniCRM\Presentation\Customers;
 use Mtr\MiniCRM\Presentation\MiniCRMPresenter;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
 use Nette\Utils\Paginator;
+use Nette\Application\Attributes\Persistent;
 
 class CustomersPresenter extends MiniCRMPresenter
 {
+    #[Persistent]
+    public string $q = '';
+
+    #[Persistent]
+    public ?string $status = null;
+
     /**
      * @param CustomersRepositoryInterface $customersRepository
      */
@@ -20,14 +27,13 @@ class CustomersPresenter extends MiniCRMPresenter
 
     /**
      * @param int $page
-     * @param string|null $q Search value for name/email
-     * @param string|null $status active|inactive
      * 
      * @return void
      */
-    public function renderIndex(int $page = 1, ?string $q = null, ?string $status = null): void
+    public function renderIndex(int $page = 1): void
     {
-        $status = $status !== null ? strtolower(trim($status)) : null;
+        $status = $this->status !== null ? strtolower(trim($this->status)) : null;
+        
         $isActive = match ($status) {
             'active' => true,
             'inactive' => false,
@@ -35,18 +41,18 @@ class CustomersPresenter extends MiniCRMPresenter
         };
 
         $paginator = $this->paginator
-            ->setItemCount($this->customersRepository->count($q, $isActive))
+            ->setItemCount($this->customersRepository->count($this->q, $isActive))
             ->setItemsPerPage(CustomersRepositoryInterface::PAGE_SIZE)
             ->setPage($page);
 
         $this->template->paginator = $paginator;
-        $this->template->q = trim((string) $q);
+        $this->template->q = trim((string) $this->q);
         $this->template->status = $status;
 
         $this->template->customers = $this->customersRepository->search(
             $paginator->getPage(),
             $paginator->getItemsPerPage(),
-            $q,
+            $this->q,
             $isActive,
         );
 

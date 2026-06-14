@@ -288,12 +288,12 @@
 <p n:if="$paginator->getItemCount() === 0" class="empty-state">Customers not found.</p>
 
 <nav n:if="$paginator->getPageCount() > 1" class="pagination" aria-label="Customers pagination">
-    <a n:if="!$paginator->isFirst()" n:href="this, page: $paginator->getPage() - 1, q: $q ?: null, status: $status" class="link">Previous</a>
+    <a n:if="!$paginator->isFirst()" n:href="this, page: $paginator->getPage() - 1" class="link">Previous</a>
 
     <span class="pagination__current">
         Page {$paginator->getPage()} / {$paginator->getPageCount()}
     </span>
 
-    <a n:if="!$paginator->isLast()" n:href="this, page: $paginator->getPage() + 1, q: $q ?: null, status: $status" class="link">Next</a>
+    <a n:if="!$paginator->isLast()" n:href="this, page: $paginator->getPage() + 1" class="link">Next</a>
 </nav>
 {/block}
