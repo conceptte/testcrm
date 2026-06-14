@@ -15,6 +15,80 @@
     font-size: 0.92rem;
 }
 
+.filters {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+
+    .status {
+        display: flex;
+        gap: 0.45rem;
+        align-items: center;
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.42rem 0.72rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        text-decoration: none;
+        background: var(--surface);
+        font-size: 0.84rem;
+        transition: border-color 0.16s ease, color 0.16s ease;
+
+        &:hover {
+            color: var(--text);
+            border-color: rgba(96, 165, 250, 0.35);
+        }
+
+        &.is-active {
+            color: var(--accent);
+            border-color: rgba(96, 165, 250, 0.35);
+            background: var(--accent-soft);
+        }
+    }
+
+    form {
+        display: flex;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    input {
+        min-width: 16rem;
+        max-width: 100%;
+        padding: 0.5rem 0.7rem;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--text);
+        outline: none;
+
+        &:focus {
+            border-color: rgba(96, 165, 250, 0.5);
+        }
+    }
+
+    button {
+        padding: 0.5rem 0.78rem;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--text);
+        cursor: pointer;
+
+        &:hover {
+            border-color: rgba(96, 165, 250, 0.35);
+            color: var(--accent);
+        }
+    }
+}
+
 .customer-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
@@ -177,7 +251,17 @@
     <span>Total customers: {$paginator->getItemCount()}</span>
 </div>
 <div class="filters">
-    <!-- Future filters will go here -->
+    <div class="status">
+        <a n:href="this, page: 1, q: $q ?: null, status: null" n:class="chip, $status === null ? 'is-active'">All</a>
+        <a n:href="this, page: 1, q: $q ?: null, status: active" n:class="chip, $status === 'active' ? 'is-active'">Active</a>
+        <a n:href="this, page: 1, q: $q ?: null, status: inactive" n:class="chip, $status === 'inactive' ? 'is-active'">Inactive</a>
+    </div>
+
+    <form method="GET" action="{link this}">
+        <input type="search" name="q" value="{$q}" placeholder="Search by name or email" aria-label="Search by name or email">
+        <input n:if="$status !== null" type="hidden" name="status" value="{$status}">
+        <button type="submit">Search</button>
+    </form>
 </div>
 <div class="customer-list">
     
@@ -204,12 +288,12 @@
 <p n:if="$paginator->getItemCount() === 0" class="empty-state">Customers not found.</p>
 
 <nav n:if="$paginator->getPageCount() > 1" class="pagination" aria-label="Customers pagination">
-    <a n:if="!$paginator->isFirst()" n:href="this, page: $paginator->getPage() - 1" class="link">Previous</a>
+    <a n:if="!$paginator->isFirst()" n:href="this, page: $paginator->getPage() - 1, q: $q ?: null, status: $status" class="link">Previous</a>
 
     <span class="pagination__current">
         Page {$paginator->getPage()} / {$paginator->getPageCount()}
     </span>
 
-    <a n:if="!$paginator->isLast()" n:href="this, page: $paginator->getPage() + 1" class="link">Next</a>
+    <a n:if="!$paginator->isLast()" n:href="this, page: $paginator->getPage() + 1, q: $q ?: null, status: $status" class="link">Next</a>
 </nav>
 {/block}

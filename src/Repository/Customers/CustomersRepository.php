@@ -19,9 +19,13 @@ class CustomersRepository implements CustomersRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function count(): int
+    public function count(?string $query = null, ?bool $isActive = null): int
     {
-        return $this->select(['COUNT(id) AS total'])->fetch()->total;
+        return $this->applyFilters(
+            $this->select(['COUNT(id) AS total']),
+            $query,
+            $isActive,
+        )->fetch()->total;
     }
 
     /**
@@ -44,22 +48,43 @@ class CustomersRepository implements CustomersRepositoryInterface
      * @inheritDoc
      */
     public function search(
-        int $page, int $perPage = self::PAGE_SIZE
+        int $page,
+        int $perPage = self::PAGE_SIZE,
+        ?string $query = null,
+        ?bool $isActive = null,
     ): Selection
     {
         $page = max(1, $page);
         $perPage = max(1, $perPage);
-        $offset = ($page - 1) * $perPage;
 
-        
-        $select = $this->select([
+        return $this->applyFilters(
+            $this->select([
                 'customers.*',
                 'COUNT(:customer_activities.id) AS activities_count',
-            ])
+            ]),
+            $query,
+            $isActive,
+        )
             ->group('id')
             ->page($page, $perPage);
+    }
 
-        return $select;
+    /**
+     * Apply common list filters for customer queries.
+     */
+    private function applyFilters(Selection $selection, ?string $query, ?bool $isActive): Selection
+    {
+        $query = trim((string) $query);
+
+        if ($query !== '') {
+            $selection->where('(name LIKE ? OR email LIKE ?)', "%{$query}%", "%{$query}%");
+        }
+
+        if ($isActive !== null) {
+            $selection->where('is_active = ?', $isActive);
+        }
+
+        return $selection;
     }
 
 
