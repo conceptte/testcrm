@@ -15,6 +15,10 @@ return [
                 'type' => Mtr\MiniCRM\Repository\Customers\Activity\ActivityRepositoryInterface::class,
                 'create' => Mtr\MiniCRM\Repository\Customers\Activity\ActivityRepository::class,
             ],
+            'commentsRepository' => [
+                'type' => Mtr\MiniCRM\Repository\Customers\Activity\Comments\CommentsRepositoryInterface::class,
+                'create' => Mtr\MiniCRM\Repository\Customers\Activity\Comments\CommentsRepository::class,
+            ],
         ],
     ],
 ];

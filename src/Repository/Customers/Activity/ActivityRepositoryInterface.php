@@ -7,7 +7,14 @@ use Nette\Database\Table\ActiveRow;
 interface ActivityRepositoryInterface
 {
     const TABLE_NAME = 'customer_activities';
-    
+
+    /**
+     * @param int $id
+     * 
+     * @return ActiveRow|null
+     */
+    public function get(int $id): ?ActiveRow;
+
     /**
      * Get activities by customer
      * 

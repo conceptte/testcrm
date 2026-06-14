@@ -33,6 +33,11 @@ final class CustomersRouteFactory
             'action' => 'view',
         ]);
 
+        $router->addRoute('minicrm/customers/<id>/activity/<activity>', [
+            'presenter' => 'Customers:Activity',
+            'action' => 'view',
+        ]);
+
         return $router;
     }
 }

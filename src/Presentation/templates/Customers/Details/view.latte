@@ -132,35 +132,6 @@
                 }
             }
         }
-
-        .pagination {
-            margin-top: 0.45rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-
-            .link {
-                padding: 0.45rem 0.76rem;
-                border-radius: 999px;
-                border: 1px solid var(--line);
-                text-decoration: none;
-                color: var(--text);
-                background: var(--surface);
-                transition: border-color 0.16s ease, color 0.16s ease;
-
-                &:hover {
-                    color: var(--accent);
-                    border-color: rgba(96, 165, 250, 0.35);
-                }
-            }
-
-            .pagination__current {
-                color: var(--muted);
-                font-weight: 600;
-            }
-        }
     }
 </style>
 <article class="customer-view">
@@ -189,9 +160,10 @@
                     <div class="content">
                         {$activity->details}
                     </div>
-
                     <div class="actions">
-                        <span>{$activity->comments_count} Comments</span>
+                        <a class="comments" href="{link Activity:view, id => $customer->public_id, activity => $activity->id, page: null}">
+                            {$activity->comments_count} Comments
+                        </a>
                     </div>
                 </div>
                 {control pagination}

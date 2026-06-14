@@ -1,13 +1,12 @@
 <?php
-namespace Mtr\MiniCRM\Repository\Customers\Activity;
+namespace Mtr\MiniCRM\Repository\Customers\Activity\Comments;
 
 use Nette\Database\Explorer;
 use Nette\Database\Table\Selection;
 use Nette\Database\Table\ActiveRow;
 
-class ActivityRepository implements ActivityRepositoryInterface
+class CommentsRepository implements CommentsRepositoryInterface
 {
-
     /**
      * @param Explorer $explorer
      */
@@ -27,19 +26,20 @@ class ActivityRepository implements ActivityRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function byCustomer(ActiveRow $customer): Selection
+    public function byActivity(ActiveRow $activity, bool $withDetails = true): Selection
     {
-        return $customer->related(self::TABLE_NAME)
-             ->select(self::TABLE_NAME . '.*, COUNT(:activity_comments.id) AS comments_count')
-             ->group(self::TABLE_NAME . '.id')
-             ->order('created_at DESC');
+        return $activity->related(self::TABLE_NAME)
+            ->order('created_at DESC');
+        ;
     }
+
 
     /**
      * @return Selection
      */
     private function select(array $columns = ['*']): Selection
     {
-        return $this->explorer->table(self::TABLE_NAME)->select(...$columns);
+        $columns = join(', ', $columns);
+        return $this->explorer->table(self::TABLE_NAME)->select($columns);
     }
 }

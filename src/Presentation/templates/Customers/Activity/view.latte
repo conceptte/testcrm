@@ -1,0 +1,31 @@
+{block content}
+<style>
+</style>
+
+<section class="activity-view">
+    <div class="header">
+        <span class="type">{$activity->type}</span>
+        <span class="date">{$activity->created_at|date:'Y-m-d H:i'}</span>
+    </div>
+
+    <div class="body">
+        <div class="content">
+            {$activity->details}
+        </div>
+    </div>
+    <div class="comments">
+        <h2>Comments ({$totalCount})</h2>
+        <div n:foreach="$comments as $comment" class="comment">
+            <div class="header">
+                <span class="date">{$comment->created_at|date:'Y-m-d H:i'}</span>
+            </div>
+
+            <div class="content">
+                {$comment->comment}
+            </div>
+        </div>
+
+        {control pagination}
+    </div>
+</section>
+{/block}
