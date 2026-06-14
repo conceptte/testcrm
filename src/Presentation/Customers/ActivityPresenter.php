@@ -51,6 +51,7 @@ class ActivityPresenter extends MiniCRMPresenter
             ->pageSize(self::PAGE_SIZE)
             ->page($this->page);
         
+        $this->template->customer = $customer;
         $this->template->activity = $activity;
         $this->template->comments = $comments;
         $this->template->totalCount = $totalCount;
