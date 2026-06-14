@@ -2,19 +2,160 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>{ifset title}{include title|stripHtml} | {/ifset}MiniCRM</title>
 
 	{asset? 'main.js'}
+	<style>
+		:root {
+			--bg: #0b1220;
+			--bg-soft: #111a2b;
+			--surface: #10192a;
+			--surface-2: #162033;
+			--line: #263246;
+			--text: #e5eefb;
+			--muted: #94a3b8;
+			--accent: #60a5fa;
+			--accent-soft: rgba(96, 165, 250, 0.12);
+			--success: #4ade80;
+			--danger: #f87171;
+			--shadow: 0 18px 48px rgba(2, 6, 23, 0.34);
+		}
+
+		html {
+			background: var(--bg);
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			background: var(--bg);
+			color: var(--text);
+			font-family: Inter, "Segoe UI", sans-serif;
+			line-height: 1.5;
+		}
+
+		a {
+			color: inherit;
+		}
+
+		.app {
+			min-height: 100vh;
+			background: var(--bg);
+
+			.bar {
+				position: sticky;
+				top: 0;
+				z-index: 10;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 1rem;
+				padding: 1rem 1.5rem;
+				border-bottom: 1px solid var(--line);
+				background: rgba(11, 18, 32, 0.9);
+				backdrop-filter: blur(12px);
+
+				.brand {
+					display: inline-flex;
+					align-items: center;
+					gap: 0.7rem;
+					text-decoration: none;
+
+					.mark {
+						display: grid;
+						place-items: center;
+						width: 2rem;
+						height: 2rem;
+						border-radius: 0.75rem;
+						background: var(--accent-soft);
+						color: var(--accent);
+						font-weight: 700;
+					}
+
+					span {
+						font-size: 0.95rem;
+						font-weight: 600;
+						letter-spacing: 0.01em;
+					}
+				}
+
+				.nav {
+					display: flex;
+					align-items: center;
+					gap: 0.5rem;
+
+					a {
+						display: inline-flex;
+						align-items: center;
+						padding: 0.6rem 0.9rem;
+						border: 1px solid transparent;
+						border-radius: 999px;
+						text-decoration: none;
+						color: var(--muted);
+						font-size: 0.92rem;
+						font-weight: 500;
+						transition: border-color 0.16s ease, color 0.16s ease, background-color 0.16s ease;
+
+						&:hover,
+						&:focus-visible {
+							outline: none;
+							color: var(--text);
+							background: var(--surface);
+							border-color: var(--line);
+						}
+					}
+				}
+			}
+
+			.main {
+				width: min(1180px, calc(100% - 2rem));
+				margin: 0 auto;
+				padding: 1.5rem 0 2.5rem;
+			}
+
+			.flash {
+				width: min(1180px, calc(100% - 2rem));
+				margin: 1rem auto 0;
+				padding: 0.85rem 1rem;
+				border: 1px solid var(--line);
+				border-radius: 14px;
+				background: var(--surface);
+				box-shadow: var(--shadow);
+
+				&.success {
+					border-color: rgba(74, 222, 128, 0.22);
+					color: #bbf7d0;
+				}
+
+				&.error {
+					border-color: rgba(248, 113, 113, 0.22);
+					color: #fecaca;
+				}
+			}
+		}
+	</style>
 </head>
 
 <body>
-    <nav>
-        <a href="{link Customers:index}">Customers</a>
-    </nav>
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+	<div class="app">
+		<header class="bar">
+			<a class="brand" href="{link Customers:index}">
+				<span class="mark">M</span>
+				<span>MiniCRM</span>
+			</a>
 
-	{include content}
+			<nav class="nav" aria-label="Primary navigation">
+				<a href="{link Customers:index}">Customers</a>
+			</nav>
+		</header>
+
+		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
+		<main class="main">
+			{include content}
+		</main>
+	</div>
 </body>
 </html>
