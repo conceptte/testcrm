@@ -46,12 +46,14 @@ class CustomersRepository implements CustomersRepositoryInterface
     public function search(
         ?string $query = null,
         ?bool $isActive = null,
+        bool $includeStats = true,
     ): Selection
     {
         return $this->applyFilters(
             $this->select([
                 'customers.*',
-                'COUNT(:customer_activities.id) AS activities_count',
+                $includeStats ? 'COUNT(:customer_activities.id) AS activities_count' : null,
+                $includeStats ? 'COUNT(:customer_activities:activity_comments.id) AS comments_count' : null,
             ]),
             $query,
             $isActive,
