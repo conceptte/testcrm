@@ -2,13 +2,16 @@
 
 namespace Mtr\MiniCRM\Presentation;
 
+use Mtr\MiniCRM\Presentation\Components\Pagination\AwarePaginator;
+use Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl;
 use Mtr\MiniCRM\Presentation\MiniCRMPresenter;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
-use Nette\Utils\Paginator;
 use Nette\Application\Attributes\Persistent;
 
 class CustomersPresenter extends MiniCRMPresenter
 {
+    use AwarePaginator;
+
     #[Persistent]
     public string $q = '';
 
@@ -20,7 +23,7 @@ class CustomersPresenter extends MiniCRMPresenter
      */
     public function __construct(
         private CustomersRepositoryInterface $customersRepository,
-        private Paginator $paginator,
+        private PaginationControl $paginationControl,
     ) {
         parent::__construct();
     }
@@ -45,14 +48,16 @@ class CustomersPresenter extends MiniCRMPresenter
             $isActive,
         )->page($page, CustomersRepositoryInterface::PAGE_SIZE);
 
-        $paginator = $this->paginator
-            ->setItemCount($this->customersRepository->count($customers))
-            ->setItemsPerPage(CustomersRepositoryInterface::PAGE_SIZE)
-            ->setPage($page);
+        $totalCount = $this->customersRepository->count($customers);
 
-        $this->template->paginator = $paginator;
+        $this->paginationControl
+            ->count($totalCount)
+            ->pageSize(CustomersRepositoryInterface::PAGE_SIZE)
+            ->page($page);
+
         $this->template->q = trim((string) $this->q);
         $this->template->status = $status;
+        $this->template->totalCount = $totalCount;
 
         $this->template->customers = $customers;
 

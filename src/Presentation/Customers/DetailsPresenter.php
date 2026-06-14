@@ -2,27 +2,31 @@
 
 namespace Mtr\MiniCRM\Presentation\Customers;
 
+use Mtr\MiniCRM\Presentation\Components\Pagination\AwarePaginator;
+use Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl;
 use Mtr\MiniCRM\Presentation\MiniCRMPresenter;
 use Mtr\MiniCRM\Repository\Customers\Activity\ActivityRepositoryInterface;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
-use Nette\Utils\Paginator;
-use Nette\Application\Attributes\Persistent;
 
 class DetailsPresenter extends MiniCRMPresenter
 {
-    const PAGE_SIZE = 5;
+    use AwarePaginator;
 
-    #[Persistent]
-    public ?int $page = 1;
+    const PAGE_SIZE = 5;
 
    public function __construct(
         private CustomersRepositoryInterface $customersRepository,
         private ActivityRepositoryInterface $activityRepository,
-        private Paginator $paginator,
+        private PaginationControl $paginationControl,
     ) {
         parent::__construct();
     }
 
+    /**
+     * @param string $id
+     * 
+     * @return void
+     */
     public function renderView(string $id): void
     {
         
@@ -35,14 +39,13 @@ class DetailsPresenter extends MiniCRMPresenter
         $activities = $this->activityRepository->byCustomer($customer)
             ->page($this->page, self::PAGE_SIZE);
 
-        $paginator = $this->paginator
-            ->setItemCount($this->customersRepository->count($activities))
-            ->setItemsPerPage(self::PAGE_SIZE)
-            ->setPage($this->page);
+        $this->paginationControl
+            ->count($this->customersRepository->count($activities))
+            ->pageSize(self::PAGE_SIZE)
+            ->page($this->page);
 
         $this->template->customer = $customer;
         $this->template->activities = $activities;
-        $this->template->paginator = $paginator;
     }
-    
+
 }
