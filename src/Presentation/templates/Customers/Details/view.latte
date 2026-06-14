@@ -1,47 +1,211 @@
 {block content}
 <style>
+    .customer-view {
+        display: grid;
+        gap: 1rem;
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--surface);
+            box-shadow: 0 10px 24px rgba(2, 6, 23, 0.22);
+            overflow: hidden;
+        }
+
+        .header {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 0.8rem;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+
+            .avatar {
+                width: 2.5rem;
+                height: 2.5rem;
+                border-radius: 999px;
+                display: grid;
+                place-items: center;
+                font-size: 0.86rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: var(--accent);
+                background: var(--accent-soft);
+            }
+
+            .title {
+                min-width: 0;
+                font-size: clamp(1rem, 0.96rem + 0.25vw, 1.2rem);
+                font-weight: 650;
+                letter-spacing: 0.01em;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            .status {
+                justify-self: start;
+                padding: 0.28rem 0.62rem;
+                border-radius: 999px;
+                font-size: 0.7rem;
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                border: 1px solid transparent;
+
+                &.is-active {
+                    color: #bbf7d0;
+                    border-color: rgba(74, 222, 128, 0.2);
+                    background: rgba(74, 222, 128, 0.1);
+                }
+
+                &.is-inactive {
+                    color: #fecaca;
+                    border-color: rgba(248, 113, 113, 0.2);
+                    background: rgba(248, 113, 113, 0.1);
+                }
+            }
+
+            > div {
+                grid-column: 2 / -1;
+            }
+
+            .email {
+                color: var(--muted);
+                font-size: 0.92rem;
+                overflow-wrap: anywhere;
+            }
+        }
+
+        .body {
+            padding: 1rem;
+        }
+
+        .activities {
+            display: grid;
+            gap: 0.7rem;
+
+            h2 {
+                margin: 0;
+                font-size: 1rem;
+                font-weight: 620;
+                color: var(--text);
+            }
+
+            .activity {
+                border: 1px solid rgba(148, 163, 184, 0.16);
+                border-radius: 12px;
+                background: rgba(22, 32, 51, 0.45);
+                padding: 0.85rem;
+                display: grid;
+                gap: 0.6rem;
+
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: baseline;
+                    gap: 0.75rem;
+                    padding: 0;
+                    border: 0;
+                }
+
+                .type {
+                    color: var(--text);
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                }
+
+                .date {
+                    color: var(--muted);
+                    font-size: 0.78rem;
+                    white-space: nowrap;
+                }
+
+                .content {
+                    color: var(--muted);
+                    font-size: 0.92rem;
+                }
+
+                .actions {
+                    color: var(--muted);
+                    font-size: 0.82rem;
+                }
+            }
+        }
+
+        .pagination {
+            margin-top: 0.45rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+
+            .link {
+                padding: 0.45rem 0.76rem;
+                border-radius: 999px;
+                border: 1px solid var(--line);
+                text-decoration: none;
+                color: var(--text);
+                background: var(--surface);
+                transition: border-color 0.16s ease, color 0.16s ease;
+
+                &:hover {
+                    color: var(--accent);
+                    border-color: rgba(96, 165, 250, 0.35);
+                }
+            }
+
+            .pagination__current {
+                color: var(--muted);
+                font-weight: 600;
+            }
+        }
+    }
 </style>
-<article class="card">
-    <div class="header">
-        <span class="avatar">{$customer->name|substr:0,2}</span>
-        <span class="title">{$customer->name}</span>
+<article class="customer-view">
+    <section class="card">
+        <div class="header">
+            <span class="avatar">{$customer->name|substr:0,2}</span>
+            <span class="title">{$customer->name}</span>
 
-        <span n:class="status, $customer->is_active ? 'is-active' : 'is-inactive'">
-            {$customer->is_active ? 'Active' : 'Inactive'}
-        </span>
-        <div>
-            <span class="email">{$customer->email}</span>
-        </div>
-    </div>
-
-    <div class="body">
-        <div class="activities">
-            <h2>Activities</h2>
-            <div n:foreach="$activities as $activity" class="activity">
-                <div class="header">
-                    <span class="type">{$activity->type}</span>
-                    <span class="date">{$activity->created_at|date:'Y-m-d H:i'}</span>
-                </div>
-
-                <div class="content">
-                    {$activity->details}
-                </div>
-
-                <div class="actions">
-                    <span>{$activity->comments_count} Comments</span>
-                </div>
+            <span n:class="status, $customer->is_active ? 'is-active' : 'is-inactive'">
+                {$customer->is_active ? 'Active' : 'Inactive'}
+            </span>
+            <div>
+                <span class="email">{$customer->email}</span>
             </div>
-            <nav n:if="$paginator->getPageCount() > 1" class="pagination" aria-label="Customers pagination">
-                <a n:if="!$paginator->isFirst()" n:href="this, page: $paginator->getPage() - 1"
-                    class="link">Previous</a>
-
-                <span class="pagination__current">
-                    Page {$paginator->getPage()} / {$paginator->getPageCount()}
-                </span>
-
-                <a n:if="!$paginator->isLast()" n:href="this, page: $paginator->getPage() + 1" class="link">Next</a>
-            </nav>
         </div>
-    </div>
+
+        <div class="body">
+            <div class="activities">
+                <h2>Activities</h2>
+                <div n:foreach="$activities as $activity" class="activity">
+                    <div class="header">
+                        <span class="type">{$activity->type}</span>
+                        <span class="date">{$activity->created_at|date:'Y-m-d H:i'}</span>
+                    </div>
+
+                    <div class="content">
+                        {$activity->details}
+                    </div>
+
+                    <div class="actions">
+                        <span>{$activity->comments_count} Comments</span>
+                    </div>
+                </div>
+                <nav n:if="$paginator->getPageCount() > 1" class="pagination" aria-label="Customers pagination">
+                    <a n:if="!$paginator->isFirst()" n:href="this, page: $paginator->getPage() - 1"
+                        class="link">Previous</a>
+
+                    <span class="pagination__current">
+                        Page {$paginator->getPage()} / {$paginator->getPageCount()}
+                    </span>
+
+                    <a n:if="!$paginator->isLast()" n:href="this, page: $paginator->getPage() + 1" class="link">Next</a>
+                </nav>
+            </div>
+        </div>
+    </section>
 </article>
 {/block}
