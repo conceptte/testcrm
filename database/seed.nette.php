@@ -28,7 +28,7 @@ $faker = Factory::create();
 for ($i = 0; $i < 100; $i++) {
 
     $customer = $database->table('customers')->insert([
-        'public_id' => strtoupper(substr(bin2hex(random_bytes(8)), 0, 16)),
+        'public_id' => uniqid('c'),
         'name' => $faker->name(),
         'email' => $faker->unique()->safeEmail(),
         'is_active' => $faker->boolean(),
@@ -55,7 +55,7 @@ for ($i = 0; $i < 100; $i++) {
         for ($k = 0; $k < $commentsCount; $k++) {
 
             $database->table('activity_comments')->insert([
-                'activity_id' => $activity->id,
+                'customer_activity_id' => $activity->id,
                 'comment' => $faker->sentence(),
                 'created_at' => $faker->dateTimeBetween('-1 year'),
             ]);

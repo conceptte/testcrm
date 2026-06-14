@@ -30,11 +30,11 @@ CREATE TABLE `customer_activities` (
 
 CREATE TABLE `activity_comments` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `activity_id` BIGINT UNSIGNED NOT NULL,
+    `customer_activity_id` BIGINT UNSIGNED NOT NULL,
     `comment` TEXT NOT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    KEY `idx_activity_created` (`activity_id`, `created_at`),
+    KEY `idx_activity_created` (`customer_activity_id`, `created_at`),
 
-    CONSTRAINT `fk_comment_activity` FOREIGN KEY (`activity_id`) REFERENCES `customer_activities`(`id`) ON DELETE CASCADE
+    CONSTRAINT `fk_comment_activity` FOREIGN KEY (`customer_activity_id`) REFERENCES `customer_activities`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
