@@ -9,6 +9,7 @@ return [
                 'type' => Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface::class,
                 'create' => Mtr\MiniCRM\Repository\Customers\CustomersRepository::class,
             ],
+            'paginator' => Nette\Utils\Paginator::class,
         ],
     ],
 ];
