@@ -40,12 +40,7 @@ for ($i = 0; $i < 100; $i++) {
 
         $activity = $database->table('customer_activities')->insert([
             'customer_id' => $customer->id,
-            'type' => $faker->randomElement([
-                'login',
-                'email',
-                'purchase',
-                'support',
-            ]),
+            'type' => $faker->randomElement(\Mtr\MiniCRM\Repository\Customers\Activity\ActivityType::toArray()),
             'details' => $faker->paragraph(),
             'created_at' => $faker->dateTimeBetween('-1 year'),
         ]);
