@@ -261,6 +261,7 @@
         <input type="search" name="q" value="{$q}" placeholder="Search by name or email" aria-label="Search by name or email">
         <input n:if="$status !== null" type="hidden" name="status" value="{$status}">
         <button type="submit">Search</button>
+        <button n:if="$q" type="submit" name="q" value="">Clear</button>
     </form>
 </div>
 <div class="customer-list">
