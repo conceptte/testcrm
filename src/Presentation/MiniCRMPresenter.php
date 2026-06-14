@@ -23,11 +23,12 @@ abstract class MiniCRMPresenter extends Presenter
         $name = $this->getName();
 
         $parts = explode(':', $name);
+        array_shift($parts); // remove first part (module name)
 
-        $presenter = end($parts);
+        $path = join(DIRECTORY_SEPARATOR, array_map(fn ($part) => ucfirst($part), $parts));
 
         return [
-            __DIR__ . "/templates/$presenter/{$this->getView()}.latte",
+            __DIR__ . "/templates/$path/{$this->getView()}.latte",
         ];
     }
     

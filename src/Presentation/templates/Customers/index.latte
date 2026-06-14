@@ -266,7 +266,7 @@
     <article n:foreach="$customers as $customer" class="card">
         <div class="header">
             <span class="avatar">{$customer->name|substr:0,2}</span>
-            <a href="{link Customers:view, id => $customer->public_id}" class="title">{$customer->name}</a>
+            <a href="{link Customers:Details:view, id => $customer->public_id}" class="title">{$customer->name}</a>
             <span n:class="status, $customer->is_active ? 'is-active' : 'is-inactive'">
                 {$customer->is_active ? 'Active' : 'Inactive'}
             </span>

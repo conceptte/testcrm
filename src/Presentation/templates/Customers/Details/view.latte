@@ -1,0 +1,47 @@
+{block content}
+<style>
+</style>
+<article class="card">
+    <div class="header">
+        <span class="avatar">{$customer->name|substr:0,2}</span>
+        <span class="title">{$customer->name}</span>
+
+        <span n:class="status, $customer->is_active ? 'is-active' : 'is-inactive'">
+            {$customer->is_active ? 'Active' : 'Inactive'}
+        </span>
+        <div>
+            <span class="email">{$customer->email}</span>
+        </div>
+    </div>
+
+    <div class="body">
+        <div class="activities">
+            <h2>Activities</h2>
+            <div n:foreach="$activities as $activity" class="activity">
+                <div class="header">
+                    <span class="type">{$activity->type}</span>
+                    <span class="date">{$activity->created_at|date:'Y-m-d H:i'}</span>
+                </div>
+
+                <div class="content">
+                    {$activity->details}
+                </div>
+
+                <div class="actions">
+                    <span>{$activity->comments_count} Comments</span>
+                </div>
+            </div>
+            <nav n:if="$paginator->getPageCount() > 1" class="pagination" aria-label="Customers pagination">
+                <a n:if="!$paginator->isFirst()" n:href="this, page: $paginator->getPage() - 1"
+                    class="link">Previous</a>
+
+                <span class="pagination__current">
+                    Page {$paginator->getPage()} / {$paginator->getPageCount()}
+                </span>
+
+                <a n:if="!$paginator->isLast()" n:href="this, page: $paginator->getPage() + 1" class="link">Next</a>
+            </nav>
+        </div>
+    </div>
+</article>
+{/block}

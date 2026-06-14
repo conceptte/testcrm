@@ -1,6 +1,6 @@
 <?php
 
-namespace Mtr\MiniCRM\Presentation\Customers;
+namespace Mtr\MiniCRM\Presentation;
 
 use Mtr\MiniCRM\Presentation\MiniCRMPresenter;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
@@ -57,4 +57,6 @@ class CustomersPresenter extends MiniCRMPresenter
         $this->template->customers = $customers;
 
     }
+
+    
 }

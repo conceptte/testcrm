@@ -141,14 +141,8 @@
 <body>
 	<div class="app">
 		<header class="bar">
-			<a class="brand" href="{link Customers:index}">
-				<span class="mark">M</span>
-				<span>MiniCRM</span>
-			</a>
 
-			<nav class="nav" aria-label="Primary navigation">
-				<a href="{link Customers:index}">Customers</a>
-			</nav>
+			
 		</header>
 
 		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
