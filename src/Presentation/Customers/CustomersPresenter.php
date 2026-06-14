@@ -40,8 +40,13 @@ class CustomersPresenter extends MiniCRMPresenter
             default => null,
         };
 
+        $customers = $this->customersRepository->search(
+            $this->q,
+            $isActive,
+        )->page($page, CustomersRepositoryInterface::PAGE_SIZE);
+
         $paginator = $this->paginator
-            ->setItemCount($this->customersRepository->count($this->q, $isActive))
+            ->setItemCount($this->customersRepository->count($customers))
             ->setItemsPerPage(CustomersRepositoryInterface::PAGE_SIZE)
             ->setPage($page);
 
@@ -49,12 +54,7 @@ class CustomersPresenter extends MiniCRMPresenter
         $this->template->q = trim((string) $this->q);
         $this->template->status = $status;
 
-        $this->template->customers = $this->customersRepository->search(
-            $paginator->getPage(),
-            $paginator->getItemsPerPage(),
-            $this->q,
-            $isActive,
-        );
+        $this->template->customers = $customers;
 
     }
 }

@@ -19,13 +19,9 @@ class CustomersRepository implements CustomersRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function count(?string $query = null, ?bool $isActive = null): int
+    public function count(Selection $selection): int
     {
-        return $this->applyFilters(
-            $this->select(['COUNT(id) AS total']),
-            $query,
-            $isActive,
-        )->fetch()->total;
+        return $selection->count('*');
     }
 
     /**
@@ -48,15 +44,10 @@ class CustomersRepository implements CustomersRepositoryInterface
      * @inheritDoc
      */
     public function search(
-        int $page,
-        int $perPage = self::PAGE_SIZE,
         ?string $query = null,
         ?bool $isActive = null,
     ): Selection
     {
-        $page = max(1, $page);
-        $perPage = max(1, $perPage);
-
         return $this->applyFilters(
             $this->select([
                 'customers.*',
@@ -65,8 +56,7 @@ class CustomersRepository implements CustomersRepositoryInterface
             $query,
             $isActive,
         )
-            ->group('id')
-            ->page($page, $perPage);
+        ->group('id');
     }
 
     /**

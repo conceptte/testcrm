@@ -1,7 +1,7 @@
 {block content}
 <style>
 .page-title {
-    margin: 0;
+    margin: 0 0.15rem 0.45rem;
     font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.55rem);
     line-height: 1.2;
     font-weight: 650;
@@ -246,10 +246,7 @@
     }
 }
 </style>
-<div n:block=title class="page-title">Customers</div>
-<div class="page-actions">
-    <span>Total customers: {$paginator->getItemCount()}</span>
-</div>
+<div n:block=title class="page-title">Customers <em>({$paginator->getItemCount()})</em></div>
 <div class="filters">
     <div class="status">
         <a n:href="this, page: 1, q: $q ?: null, status: null" n:class="chip, $status === null ? 'is-active'">All</a>
