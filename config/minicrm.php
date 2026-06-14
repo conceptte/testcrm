@@ -4,7 +4,11 @@ return [
         'mapping' => [
             'MiniCRM' => 'Mtr\MiniCRM\Presentation\*\**Presenter',
         ],
-        // 'services' => [
-        // ],
+        'services' => [
+            'customersRepository' =>[
+                'type' => Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface::class,
+                'create' => Mtr\MiniCRM\Repository\Customers\CustomersRepository::class,
+            ],
+        ],
     ],
 ];

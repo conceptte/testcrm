@@ -31,25 +31,26 @@ final class MiniCRMExtension extends CompilerExtension
     {        
         $this->extConfig = $this->loadFromFile(__DIR__ . '/../config/minicrm.php') ?? [];
 
-bdump($this->extConfig, 'MiniCRM config');
+//bdump($this->extConfig, 'MiniCRM config');
 
-       // $this->setupDefinitions();        
+        $this->setupDefinitions();
     }
 
-    // private function setupDefinitions(): void
-    // {
-    //        $this->loadDefinitionsFromConfig($this->config(ConfigNode::Services));
-    // }
-
-    /**
-     * @inheritDoc
-     */
     public function beforeCompile(): void
     {
-        $this
-            ->mapPresenters()
-        //    ->registerRoutes()
-        ;
+        $this->mapPresenters();
+    }
+
+    /**
+     * Load service definitions from config
+     * 
+     * @return static
+     */
+    private function setupDefinitions(): static
+    {
+        $this->loadDefinitionsFromConfig($this->config(ConfigNode::Services));
+
+        return $this;
     }
 
     /**
@@ -57,7 +58,7 @@ bdump($this->extConfig, 'MiniCRM config');
      * 
      * @return static
      * 
-     * @throws MissingServiceException if the presenterFactory service is not found.
+     * @throws MissingServiceException
      */
     private function mapPresenters(): static
     {
