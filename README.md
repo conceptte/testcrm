@@ -17,6 +17,7 @@ Main gap of extension in current version:
 
 
 ## Installation ([Fast dockerized setup:](https://github.com/conceptte/testcrm-host.git))
+I recomend to use the dockerized setup for quick testing. It includes a simple host app with the extension installed and configured, so you can see it in action right away. You can find it here:
 https://github.com/conceptte/testcrm-host.git
 
 1. Install
