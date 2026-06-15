@@ -1,13 +1,13 @@
 <?php
-namespace Mtr\MiniCRM\Presentation\API;
+namespace Mtr\MiniCRM\API\V1\Presentation;
 
-use Nette\Application\UI\Presenter;
+use Mtr\MiniCRM\API\V1\Presentation\ApiPresenter;
 use Nette\Utils\DateTime;
 
 /**
  * Ping minicrm
  */
-final class Ping extends Presenter
+final class PingPresenter extends ApiPresenter
 {
     /**
      * @return void
@@ -16,6 +16,7 @@ final class Ping extends Presenter
     {
         $this->sendJson([
             'status' => 'ok',
+            'version' => $this->version,
             'time' => DateTime::from('now')->format(DateTime::ATOM),
         ]);
     }

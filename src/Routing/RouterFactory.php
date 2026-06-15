@@ -16,13 +16,15 @@ class RouterFactory
      */
     public static function create(): RouteList
     {
-        $router = new RouteList('MiniCRM');
-        
-        $router
-            ->add(ApiRouteFactory::create())
-            ->add(CustomersRouteFactory::create())
-        ;
+        $group = new RouteList();
 
-        return $router;
+        $minicrm = (new RouteList('MiniCRM'))->add(CustomersRouteFactory::create());
+        $api = (new RouteList('MiniCRMAPI'))->add(ApiRouteFactory::create());
+
+        $group
+            ->add($minicrm)
+            ->add($api);
+
+        return $group;
     }
 }

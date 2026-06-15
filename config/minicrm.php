@@ -3,6 +3,7 @@ return [
     'minicrm' => [
         'mapping' => [
             'MiniCRM' => 'Mtr\MiniCRM\Presentation\*\*Presenter',
+            'MiniCRMAPI' => 'Mtr\MiniCRM\API\V1\Presentation\*\*Presenter',
         ],
         'services' => [
             'paginator' => Nette\Utils\Paginator::class,
