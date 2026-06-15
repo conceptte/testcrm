@@ -97,6 +97,47 @@
                 color: var(--text);
             }
 
+            .add-comment {
+                form {
+                    display: grid;
+                    gap: 0.6rem;
+                }
+
+                textarea {
+                    width: 100%;
+                    min-height: 6.5rem;
+                    resize: vertical;
+                    box-sizing: border-box;
+                    padding: 0.75rem 0.8rem;
+                    border-radius: 10px;
+                    border: 1px solid var(--line);
+                    background: var(--surface);
+                    color: var(--text);
+                    font: inherit;
+                    outline: none;
+
+                    &:focus {
+                        border-color: rgba(96, 165, 250, 0.45);
+                    }
+                }
+
+                button,
+                input[type='submit'] {
+                    justify-self: start;
+                    padding: 0.5rem 0.9rem;
+                    border-radius: 999px;
+                    border: 1px solid rgba(96, 165, 250, 0.3);
+                    background: var(--accent-soft);
+                    color: var(--accent);
+                    font-weight: 600;
+                    cursor: pointer;
+
+                    &:hover {
+                        border-color: rgba(96, 165, 250, 0.45);
+                    }
+                }
+            }
+
             .comment {
                 border: 1px solid rgba(148, 163, 184, 0.15);
                 border-radius: 12px;
@@ -151,10 +192,6 @@
     <div class="comments">
         <h2>Comments ({$totalCount})</h2>
         <div class="add-comment">
-            <!--form method="POST" action="{link comment, id => $customer->public_id, activity => $activity->id}" class="ajax">
-                <textarea name="comment" rows="3" placeholder="Add a comment..." required></textarea>
-                <button type="submit">Add Comment</button>
-            </form-->
             <div n:snippet="commentForm">
                 {control commentForm}
             </div>
