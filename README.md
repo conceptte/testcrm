@@ -1,5 +1,29 @@
 # MiniCRM - Test exersise
 
+## Journey
+During the development of this package, I focused on creating a clean and modular architecture that can be easily integrated into any Nette-based application. I wanted to demonstrate best practices in Nette development, such as using extensions, presenters, and repositories to keep the code organized and maintainable.
+
+I went throwgh such opics as:
+- Nette extensions
+    - configuration
+    - bootstrap and services registration
+- Dependency injection
+- Routing for clean URLs
+    - route definitions
+- Presenters
+    - parameters injection
+    - persistence parameters
+    - forms
+    - reusable components
+    - redraw and snippets
+- Form handling
+- Latte basics
+    - templates and layouts
+    - blocks and snippets
+- Database interactions with repositories
+    - Explorer
+- API design for JSON endpoints
+- Security practices (CSRF, SQL injection prevention, XSS protection)
 
 ## About the app
 
