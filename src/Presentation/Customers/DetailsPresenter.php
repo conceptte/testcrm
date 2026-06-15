@@ -49,9 +49,15 @@ class DetailsPresenter extends MiniCRMPresenter
         $this->template->activities = $activities;
 
         if ($this->isAjax()) {
-            $this->redrawControl('activityList');
-            $this->redrawControl('paginatorContainer');
+            $this->redrawAllControls();
         }
+    }
+
+    protected function redrawAllControls(): void
+    {
+        parent::redrawAllControls();
+        $this->redrawControl('activityList');
+        $this->redrawControl('paginatorContainer');
     }
 
 }

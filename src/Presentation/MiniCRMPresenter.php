@@ -31,5 +31,16 @@ abstract class MiniCRMPresenter extends Presenter
             __DIR__ . "/templates/$path/{$this->getView()}.latte",
         ];
     }
+
+    /**
+     * Redraw all controls on the page
+     * to use in child presenters
+     * 
+     * @return void
+     */
+    protected function redrawAllControls(): void
+    {
+        $this->redrawControl('flashes');
+    }
     
 }

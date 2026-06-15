@@ -33,17 +33,6 @@ class CustomersPresenter extends MiniCRMPresenter
      * 
      * @return void
      */
-    public function loadState(array $params): void
-    {
-        parent::loadState($params);
-        // todo: validate pagination params
-    }
-
-    /**
-     * @param int $page
-     * 
-     * @return void
-     */
     public function renderIndex(int $page = 1): void
     {
         $status = $this->status !== null ? strtolower(trim($this->status)) : null;
@@ -74,14 +63,22 @@ class CustomersPresenter extends MiniCRMPresenter
         $this->template->customers = $customers;
 
         if ($this->isAjax()) {
-            $this->redrawControl('statusControls');
-            $this->redrawControl('searchForm');
-            $this->redrawControl('totalCount');
-            $this->redrawControl('customersList');
-            $this->redrawControl('paginatorContainer');
+            $this->redrawAllControls();
         }
 
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function redrawAllControls(): void
+    {
+        parent::redrawAllControls();
+        $this->redrawControl('statusControls');
+        $this->redrawControl('searchForm');
+        $this->redrawControl('totalCount');
+        $this->redrawControl('customersList');
+        $this->redrawControl('paginatorContainer');
+    }
     
 }
