@@ -24,7 +24,7 @@ class ActivityPresenter extends MiniCRMPresenter
     #[Persistent]
     public int $activity;
 
-    const PAGE_SIZE = 2;
+    const PAGE_SIZE = 10;
 
    public function __construct(
         private CustomersRepositoryInterface $customersRepository,
