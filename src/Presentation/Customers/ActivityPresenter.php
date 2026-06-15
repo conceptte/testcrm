@@ -78,6 +78,7 @@ class ActivityPresenter extends MiniCRMPresenter
     protected function createComponentCommentForm(): Form
     {
         $form = new Form();
+        $form->addProtection();
 
         $form->setHtmlAttribute('class', 'ajax comment-form');
 
@@ -88,8 +89,6 @@ class ActivityPresenter extends MiniCRMPresenter
             ->setHtmlAttribute('rows', 5)
             ;
         $form->addSubmit('submit', 'Comment');
-
-$form->addProtection();
 
         $form->onSuccess[] = [$this, 'handleCommentForm'];
 
@@ -139,7 +138,7 @@ $form->addProtection();
     {
         parent::redrawAllControls();
 
-        $this->redrawControl('flashes');
+        $this->redrawControl('commentsCount');
         $this->redrawControl('commentForm');
         $this->redrawControl('commentsList');
         $this->redrawControl('paginatorContainer');
