@@ -12,7 +12,6 @@ use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
-use Override;
 
 class ActivityPresenter extends MiniCRMPresenter
 {

@@ -31,7 +31,7 @@
                 <span class="email">{$customer->email}</span>
             </div>
             <div class="row smaller">
-                <em>{$customer->activities_count} Activities &middot; {$customer->comments_count} Comments</em>
+                <em><a href="{link Customers:Details:view, id => $customer->public_id, page: null}">{$customer->activities_count} Activities</a> &middot; {$customer->comments_count} Comments</em>
             </div>
         </div>
     </article>

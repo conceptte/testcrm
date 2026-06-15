@@ -2,7 +2,10 @@
 <article class="customer-view">
     <section class="card">
         <div class="header">
-            <span class="avatar">{$customer->name|substr:0,2}</span>
+            <a href="{link :MiniCRM:Customers:index, page: null}" class="title">
+                <span class="back">&larr;</span>
+                <span class="avatar">{$customer->name|substr:0,2}</span>
+            </a>
             <span class="title">{$customer->name}</span>
 
             <span n:class="status, $customer->is_active ? 'is-active' : 'is-inactive'">
