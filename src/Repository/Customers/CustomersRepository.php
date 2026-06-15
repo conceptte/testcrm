@@ -52,8 +52,8 @@ class CustomersRepository implements CustomersRepositoryInterface
         return $this->applyFilters(
             $this->select([
                 'customers.*',
-                $includeStats ? 'COUNT(:customer_activities.id) AS activities_count' : null,
-                $includeStats ? 'COUNT(:customer_activities:activity_comments.id) AS comments_count' : null,
+                $includeStats ? 'COUNT(DISTINCT :customer_activities.id) AS activities_count' : null,
+                $includeStats ? 'COUNT(DISTINCT :customer_activities:activity_comments.id) AS comments_count' : null,
             ]),
             $query,
             $isActive,
