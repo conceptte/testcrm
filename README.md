@@ -1,4 +1,4 @@
-# MiniCRM - Test exersi
+# MiniCRM - Test exersise
 
 
 ## About the app
