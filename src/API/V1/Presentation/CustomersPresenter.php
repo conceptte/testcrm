@@ -83,6 +83,7 @@ class CustomersPresenter extends ApiPresenter
             'params' => $params,
             'pagination' => [
                 'total' => $total,
+                'current' => $params['page'] ?? 1,
                 'per_page' => self::PAGE_SIZE,
                 'total_pages' => ceil($total / self::PAGE_SIZE),
             ],
