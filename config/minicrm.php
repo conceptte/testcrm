@@ -1,4 +1,13 @@
 <?php
+use Nette\Utils\Paginator;
+use Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl;
+use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
+use Mtr\MiniCRM\Repository\Customers\CustomersRepository;
+use Mtr\MiniCRM\Repository\Customers\Activity\ActivityRepositoryInterface;
+use Mtr\MiniCRM\Repository\Customers\Activity\ActivityRepository;
+use Mtr\MiniCRM\Repository\Customers\Activity\Comments\CommentsRepositoryInterface;
+use Mtr\MiniCRM\Repository\Customers\Activity\Comments\CommentsRepository;
+
 return [
     'minicrm' => [
         'mapping' => [
@@ -6,19 +15,19 @@ return [
             'MiniCRMAPI' => 'Mtr\MiniCRM\API\V1\Presentation\*\*Presenter',
         ],
         'services' => [
-            'paginator' => Nette\Utils\Paginator::class,
-            'paginationControl' => Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl::class,
+            'paginator' => Paginator::class,
+            'paginationControl' => PaginationControl::class,
             'customersRepository' =>[
-                'type' => Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface::class,
-                'create' => Mtr\MiniCRM\Repository\Customers\CustomersRepository::class,
+                'type' => CustomersRepositoryInterface::class,
+                'create' => CustomersRepository::class,
             ],
             'activityRepository' => [
-                'type' => Mtr\MiniCRM\Repository\Customers\Activity\ActivityRepositoryInterface::class,
-                'create' => Mtr\MiniCRM\Repository\Customers\Activity\ActivityRepository::class,
+                'type' => ActivityRepositoryInterface::class,
+                'create' => ActivityRepository::class,
             ],
             'commentsRepository' => [
-                'type' => Mtr\MiniCRM\Repository\Customers\Activity\Comments\CommentsRepositoryInterface::class,
-                'create' => Mtr\MiniCRM\Repository\Customers\Activity\Comments\CommentsRepository::class,
+                'type' => CommentsRepositoryInterface::class,
+                'create' => CommentsRepository::class,
             ],
         ],
     ],
