@@ -98,7 +98,7 @@ class CustomersRepository implements CustomersRepositoryInterface
     private function withStats(Selection $selection): Selection
     {
         return $selection
-            ->select(' COUNT(DISTINCT :customer_activities.id) AS activities_count, COUNT(DISTINCT :customer_activities:activity_comments.id) AS comments_count')
+            ->select(self::TABLE_NAME . '.*, COUNT(DISTINCT :customer_activities.id) AS activities_count, COUNT(DISTINCT :customer_activities:activity_comments.id) AS comments_count')
             ->group(self::TABLE_NAME . '.id');
     }
 
