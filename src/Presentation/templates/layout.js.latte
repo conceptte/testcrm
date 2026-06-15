@@ -1,0 +1,32 @@
+{block pageScripts}
+<script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+			naja.initialize();
+
+			const scheduleFlashHide = () => {
+				const flashes = document.querySelector('.snippet--flashes');
+
+				if (!flashes) {
+					return;
+				}
+
+				flashes.classList.remove('is-hidden');
+
+				if (flashes._hideTimer) {
+					clearTimeout(flashes._hideTimer);
+				}
+
+				flashes._hideTimer = setTimeout(() => {
+					flashes.classList.add('is-hidden');
+				}, 3000);
+			};
+			scheduleFlashHide();
+
+			naja.addEventListener('complete', () => {
+				scheduleFlashHide();
+			});
+		 });
+</script>
+{/block}
