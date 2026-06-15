@@ -1,4 +1,4 @@
-# MiniCRM - Customer Management System
+# MiniCRM - Test exersi
 
 
 ## About the app
