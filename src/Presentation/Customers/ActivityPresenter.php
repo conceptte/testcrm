@@ -78,7 +78,7 @@ class ActivityPresenter extends MiniCRMPresenter
     protected function createComponentCommentForm(): Form
     {
         $form = new Form();
-        $form->addProtection();
+        //$form->addProtection();
 
         $form->setHtmlAttribute('class', 'ajax comment-form');
 

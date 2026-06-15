@@ -142,7 +142,7 @@ public static function create(): RouteList
 ### Group of Frontend routes:
 - `/minicrm/customers` - Customer list page (search, filter, sort)
 - `/minicrm/customers/{public_id}` - Customer details page (activities and history)
-- `/minicrm/activities/{id}` - Activity page (view details and comments)
+- `/minicrm/customers/{public_id}/activity/{id}` - Activity page (view details and comments)
 ```php
 public static function create(): RouteList
 {
