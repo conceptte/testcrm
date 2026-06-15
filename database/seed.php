@@ -51,7 +51,7 @@ for ($i = 0; $i < 100; $i++) {
 
             $database->table('activity_comments')->insert([
                 'customer_activity_id' => $activity->id,
-                'comment' => $faker->sentence(),
+                'comment' => $faker->sentences(random_int(3, 5), true),
                 'created_at' => $faker->dateTimeBetween('-1 year'),
             ]);
         }
