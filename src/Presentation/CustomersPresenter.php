@@ -19,6 +19,9 @@ class CustomersPresenter extends MiniCRMPresenter
     #[Persistent]
     public ?string $status = null;
 
+    #[Persistent]
+    public ?string $sort = null;
+
     /**
      * @param CustomersRepositoryInterface $customersRepository
      */
@@ -43,7 +46,9 @@ class CustomersPresenter extends MiniCRMPresenter
         $customers = $this->customersRepository->search(
             $this->q,
             $isActive,
-        )->page($page, CustomersRepositoryInterface::PAGE_SIZE);
+            $this->sort
+        )
+        ->page($page, CustomersRepositoryInterface::PAGE_SIZE);
 
         $totalCount = $this->customersRepository->count($customers);
 
@@ -55,6 +60,7 @@ class CustomersPresenter extends MiniCRMPresenter
 
         $this->template->q = trim((string) $this->q);
         $this->template->status = $status;
+        $this->template->sort = $this->sort;
         $this->template->isActive = $isActive;
         $this->template->totalCount = $totalCount;
 
@@ -74,6 +80,7 @@ class CustomersPresenter extends MiniCRMPresenter
         parent::redrawAllControls();
         $this->redrawControl('statusControls');
         $this->redrawControl('searchForm');
+        $this->redrawControl('sortControls');
         $this->redrawControl('totalCount');
         $this->redrawControl('customersList');
         $this->redrawControl('paginatorContainer');

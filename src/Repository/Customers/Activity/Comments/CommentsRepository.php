@@ -33,6 +33,9 @@ class CommentsRepository implements CommentsRepositoryInterface
         ;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function add($activity_id, string $content): ActiveRow
     {
         return $this->explorer->table(self::TABLE_NAME)->insert([

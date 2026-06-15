@@ -9,13 +9,14 @@ enum CustomerStatus: string
     /**
      * @param string|null $status
      * 
-     * @return bool
+     * @return bool|null
      */
-    public static function isActive(?string $status = null): bool
+    public static function isActive(?string $status = null): ?bool
     {
         return match ($status) {
             static::ACTIVE->value => true,
-            default => false,
+            static::INACTIVE->value => false,
+            default => null,
         };
     }
 }

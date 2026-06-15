@@ -21,4 +21,12 @@ interface CommentsRepositoryInterface
      * @return Selection
      */
     public function byActivity(ActiveRow $activity): Selection;
+
+    /**
+     * @param int $activity_id
+     * @param string $content
+     * 
+     * @return ActiveRow
+     */
+    public function add($activity_id, string $content): ActiveRow;
 }

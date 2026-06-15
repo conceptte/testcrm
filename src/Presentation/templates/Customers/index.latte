@@ -2,9 +2,9 @@
 <div n:block=title class="page-title">Customers <em n:snippet="totalCount">({$totalCount})</em></div>
 <div class="filters">
     <div n:snippet="statusControls" class="status">
-        <a n:href="this, page: 1, q: $q ?: null, status: null" n:class="ajax, chip, $status === null ? 'is-active'">All</a>
-        <a n:href="this, page: 1, q: $q ?: null, status: active" n:class="ajax, chip, $status === 'active' ? 'is-active'">Active</a>
-        <a n:href="this, page: 1, q: $q ?: null, status: inactive" n:class="ajax, chip, $status === 'inactive' ? 'is-active'">Inactive</a>
+        <a n:href="this, status: null" n:class="ajax, chip, $status === null ? 'is-active'">All</a>
+        <a n:href="this, status: active" n:class="ajax, chip, $status === 'active' ? 'is-active'">Active</a>
+        <a n:href="this, status: inactive" n:class="ajax, chip, $status === 'inactive' ? 'is-active'">Inactive</a>
     </div>
     <div n:snippet="searchForm">
         <form action="{link this}" class="ajax">
@@ -13,6 +13,13 @@
             <button type="submit">Search</button>
             <button n:if="$q" type="submit" name="q" value="">Clear</button>
         </form>
+    </div>
+    |
+    <div n:snippet="sortControls" class="sort">
+        <span>Sort by:</span>
+        <a n:href="this, sort: name" n:class="ajax, chip, $sort === 'name' ? 'is-active'">Name</a>
+        <a n:href="this, sort: active" n:class="ajax, chip, $sort === 'active' ? 'is-active'">Active</a>
+        <a n:href="this, sort: inactive" n:class="ajax, chip, $sort === 'inactive' ? 'is-active'">Inactive</a>
     </div>
 </div>
 <div n:snippet="customersList" class="customer-list">

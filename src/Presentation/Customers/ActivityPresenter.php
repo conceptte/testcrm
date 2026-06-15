@@ -89,7 +89,7 @@ class ActivityPresenter extends MiniCRMPresenter
             ;
         $form->addSubmit('submit', 'Comment');
 
-        //$form->addProtection();
+$form->addProtection();
 
         $form->onSuccess[] = [$this, 'handleCommentForm'];
 

@@ -46,6 +46,7 @@ interface CustomersRepositoryInterface
     public function search(
         ?string $query = null,
         ?bool $isActive = null,
+        ?string $sort = null,
     ): Selection;
 
 

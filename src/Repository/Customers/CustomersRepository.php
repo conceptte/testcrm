@@ -46,6 +46,7 @@ class CustomersRepository implements CustomersRepositoryInterface
     public function search(
         ?string $query = null,
         ?bool $isActive = null,
+        ?string $order = null,
         bool $includeStats = true,
     ): Selection
     {
@@ -55,7 +56,8 @@ class CustomersRepository implements CustomersRepositoryInterface
             $query,
             $isActive,
         )
-        ->group(self::TABLE_NAME . '.id');
+        ->group(self::TABLE_NAME . '.id')
+        ->order($this->getOrder($order));
     }
 
     /**
@@ -102,4 +104,25 @@ class CustomersRepository implements CustomersRepositoryInterface
             ->group(self::TABLE_NAME . '.id');
     }
 
+    /**
+     * Get order by clause for customer queries.
+     * 
+     * @param string|null $sort
+     * 
+     * @return string
+     */
+    private function getOrder(?string $sort = null): string
+    {
+        $column = match ($sort) {
+            'name',  => $sort,
+            'email' => $sort,
+            'active' => 'is_active DESC',
+            'inactive' => 'is_active ASC',
+            default => 'id',
+        };
+
+        $column = sprintf('%s.%s', self::TABLE_NAME, $column);
+
+        return $column;
+    }
 }
