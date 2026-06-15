@@ -1,6 +1,5 @@
 {
     "name": "conceptte/testcrm",
-    "version": "1.0.1",
     "description": "MiniCRM extension for Nette Framework (test example)",
     "type": "library",
     "license": "MIT",
