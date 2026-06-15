@@ -6,6 +6,7 @@ use Mtr\MiniCRM\Presentation\Components\Pagination\AwarePaginator;
 use Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl;
 use Mtr\MiniCRM\Presentation\MiniCRMPresenter;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
+use Mtr\MiniCRM\Repository\Customers\CustomerStatus;
 use Nette\Application\Attributes\Persistent;
 
 class CustomersPresenter extends MiniCRMPresenter
@@ -37,11 +38,7 @@ class CustomersPresenter extends MiniCRMPresenter
     {
         $status = $this->status !== null ? strtolower(trim($this->status)) : null;
         
-        $isActive = match ($status) {
-            'active' => true,
-            'inactive' => false,
-            default => null,
-        };
+        $isActive = CustomerStatus::isActive($status);
 
         $customers = $this->customersRepository->search(
             $this->q,
@@ -58,6 +55,7 @@ class CustomersPresenter extends MiniCRMPresenter
 
         $this->template->q = trim((string) $this->q);
         $this->template->status = $status;
+        $this->template->isActive = $isActive;
         $this->template->totalCount = $totalCount;
 
         $this->template->customers = $customers;

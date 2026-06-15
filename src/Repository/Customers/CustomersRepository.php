@@ -37,7 +37,7 @@ class CustomersRepository implements CustomersRepositoryInterface
      */
     public function byPublicId(string $publicId): ?ActiveRow
     {
-        return $this->select()->where('public_id = ?', $publicId)->fetch();
+        return $this->withStats($this->select())->where('public_id = ?', $publicId)->fetch();
     }
 
     /**
@@ -49,16 +49,13 @@ class CustomersRepository implements CustomersRepositoryInterface
         bool $includeStats = true,
     ): Selection
     {
+        $selection = $includeStats ? $this->withStats($this->select()) : $this->select();
         return $this->applyFilters(
-            $this->select([
-                'customers.*',
-                $includeStats ? 'COUNT(DISTINCT :customer_activities.id) AS activities_count' : null,
-                $includeStats ? 'COUNT(DISTINCT :customer_activities:activity_comments.id) AS comments_count' : null,
-            ]),
+            $selection,
             $query,
             $isActive,
         )
-        ->group('id');
+        ->group(self::TABLE_NAME . '.id');
     }
 
     /**
@@ -79,8 +76,6 @@ class CustomersRepository implements CustomersRepositoryInterface
         return $selection;
     }
 
-
-
     /**
      * @param array $columns
      * @param mixed ...$params
@@ -91,6 +86,20 @@ class CustomersRepository implements CustomersRepositoryInterface
     {
         $columns = join(', ', $columns);
         return $this->explorer->table(self::TABLE_NAME)->select($columns, ...$params);
+    }
+
+    /**
+     * Add activities and comments count to selection.
+     * 
+     * @param Selection $selection
+     * 
+     * @return Selection
+     */
+    private function withStats(Selection $selection): Selection
+    {
+        return $selection
+            ->select(' COUNT(DISTINCT :customer_activities.id) AS activities_count, COUNT(DISTINCT :customer_activities:activity_comments.id) AS comments_count')
+            ->group(self::TABLE_NAME . '.id');
     }
 
 }
