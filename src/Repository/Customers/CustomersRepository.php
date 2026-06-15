@@ -51,23 +51,25 @@ class CustomersRepository implements CustomersRepositoryInterface
     ): Selection
     {
         $selection = $includeStats ? $this->withStats($this->select()) : $this->select();
-        return $this->applyFilters(
-            $selection,
-            $query,
-            $isActive,
-        )
-        ->group(self::TABLE_NAME . '.id')
-        ->order($this->getOrder($order));
+
+        return 
+            $this->applyFilters(
+                $selection,
+                $query,
+                $isActive,
+            )
+            ->group(self::TABLE_NAME . '.id')
+            ->order($this->getOrder($order));
     }
 
     /**
      * Apply common list filters for customer queries.
      */
-    private function applyFilters(Selection $selection, ?string $query, ?bool $isActive): Selection
+    private function applyFilters(Selection $selection, ?string $query = null, ?bool $isActive = null): Selection
     {
         $query = trim((string) $query);
 
-        if ($query !== '') {
+        if ($query) {
             $selection->where('(name LIKE ? OR email LIKE ?)', "%{$query}%", "%{$query}%");
         }
 
