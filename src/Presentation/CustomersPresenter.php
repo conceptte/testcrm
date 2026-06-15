@@ -33,11 +33,9 @@ class CustomersPresenter extends MiniCRMPresenter
     }
 
     /**
-     * @param int $page
-     * 
      * @return void
      */
-    public function renderIndex(int $page = 1): void
+    public function renderIndex(): void
     {
         $status = $this->status !== null ? strtolower(trim($this->status)) : null;
         
@@ -48,7 +46,7 @@ class CustomersPresenter extends MiniCRMPresenter
             $isActive,
             $this->sort
         )
-        ->page($page, CustomersRepositoryInterface::PAGE_SIZE);
+        ->page($this->page(), CustomersRepositoryInterface::PAGE_SIZE);
 
         $totalCount = $this->customersRepository->count($customers);
 
@@ -56,7 +54,7 @@ class CustomersPresenter extends MiniCRMPresenter
             ->isAjax()
             ->count($totalCount)
             ->pageSize(CustomersRepositoryInterface::PAGE_SIZE)
-            ->page($page);
+            ->page($this->page());
 
         $this->template->q = trim((string) $this->q);
         $this->template->status = $status;

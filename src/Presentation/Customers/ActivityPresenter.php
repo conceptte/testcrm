@@ -52,7 +52,7 @@ class ActivityPresenter extends MiniCRMPresenter
         }
 
         $comments = $this->commentsRepository->byActivity($activity)
-            ->page($this->page, self::PAGE_SIZE);
+            ->page($this->page(), self::PAGE_SIZE);
         
         $totalCount = $activity->related('activity_comments')->count();
 
@@ -60,7 +60,7 @@ class ActivityPresenter extends MiniCRMPresenter
             ->isAjax()
             ->count($totalCount)
             ->pageSize(self::PAGE_SIZE)
-            ->page($this->page);
+            ->page($this->page());
         
         $this->template->customer = $customer;
         $this->template->activity = $activity;
@@ -84,7 +84,8 @@ class ActivityPresenter extends MiniCRMPresenter
 
         $form->addTextArea('comment', '')
             ->setRequired('Please enter a comment')
-            ->addRule(Form::MIN_LENGTH, 'Comment must be at least %d characters long', 3)
+            ->addRule(Form::MinLength, 'Comment must be at least %d characters long', 3)
+            ->addRule(Form::MaxLength, 'Comment cannot be longer than %d characters', 2048)
             ->setHtmlAttribute('placeholder', 'Add a comment...')
             ->setHtmlAttribute('rows', 5)
             ;

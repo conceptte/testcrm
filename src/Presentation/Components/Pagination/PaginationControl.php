@@ -73,7 +73,7 @@ class PaginationControl extends Control
      */
     public function page(int $page): static
     {
-        $this->paginator->setPage($page);
+        $this->paginator->setPage($page > 0 ? $page : 1);
 
         return $this;
     }

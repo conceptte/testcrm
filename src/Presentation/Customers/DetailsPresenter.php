@@ -37,13 +37,13 @@ class DetailsPresenter extends MiniCRMPresenter
         }
 
         $activities = $this->activityRepository->byCustomer($customer)
-            ->page($this->page, self::PAGE_SIZE);
+            ->page($this->page(), self::PAGE_SIZE);
 
         $this->paginationControl
             ->isAjax()
             ->count($this->customersRepository->count($activities))
             ->pageSize(self::PAGE_SIZE)
-            ->page($this->page);
+            ->page($this->page());
 
         $this->template->customer = $customer;
         $this->template->activities = $activities;

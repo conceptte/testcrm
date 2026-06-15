@@ -23,7 +23,7 @@ class DetailsPresenter extends Presenter
     public function actionIndex(string $id): void
     {
         if (!$customer = $this->customerRepository->byPublicId($id)) {
-            $this->error('Customer not found');
+            $this->sendJson(['error' => 'Customer not found']);
         }
 
         $this->sendJson(CustomerResource::fromRow($customer));
