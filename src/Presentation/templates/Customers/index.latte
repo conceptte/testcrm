@@ -3,8 +3,8 @@
 <div class="filters">
     <div n:snippet="statusControls" class="status">
         <a n:href="this, page: 1, q: $q ?: null, status: null" n:class="ajax, chip, $status === null ? 'is-active'">All</a>
-        <a n:href="this, page: 1, q: $q ?: null, status: active" n:class="ajax, chip, $isActive ? 'is-active'">Active</a>
-        <a n:href="this, page: 1, q: $q ?: null, status: inactive" n:class="ajax, chip, !$isActive ? 'is-active'">Inactive</a>
+        <a n:href="this, page: 1, q: $q ?: null, status: active" n:class="ajax, chip, $status === 'active' ? 'is-active'">Active</a>
+        <a n:href="this, page: 1, q: $q ?: null, status: inactive" n:class="ajax, chip, $status === 'inactive' ? 'is-active'">Inactive</a>
     </div>
     <div n:snippet="searchForm">
         <form action="{link this}" class="ajax">
