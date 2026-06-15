@@ -7,6 +7,15 @@
 	<title>{ifset title}{include title|stripHtml} | {/ifset}MiniCRM</title>
 
 	{asset? 'main.js'}
+
+	<script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			
+			naja.initialize();
+		});
+	</script>
+
 	<style>
 		:root {
 			--bg: #0b1220;
@@ -144,8 +153,8 @@
 
 			<nav>
 				<a n:href=":MiniCRM:Customers:index" class="brand">
-					<span class="mark">M</span>
-					<span>MiniCRM</span>
+
+					<span>Customers</span>
 				</a>
 			</nav>
 		</header>

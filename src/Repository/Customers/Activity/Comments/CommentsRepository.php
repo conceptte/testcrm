@@ -33,6 +33,15 @@ class CommentsRepository implements CommentsRepositoryInterface
         ;
     }
 
+    public function add(ActiveRow $activity, string $content): ActiveRow
+    {
+        return $this->explorer->table(self::TABLE_NAME)->insert([
+            'activity_id' => $activity->id,
+            'content' => $content,
+            'created_at' => new \DateTime(),
+        ]);
+    }
+
 
     /**
      * @return Selection

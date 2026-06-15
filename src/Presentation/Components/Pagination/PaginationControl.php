@@ -4,13 +4,14 @@ namespace Mtr\MiniCRM\Presentation\Components\Pagination;
 use Nette\Application\UI\Control;
 use Nette\Utils\Paginator;
 
-final class PaginationControl extends Control
+class PaginationControl extends Control
 {
+    private bool $isAjax = false;
     /**
      * @param Paginator $paginator
      */
     public function __construct(
-        private Paginator $paginator
+        protected Paginator $paginator
     ) {}
 
     /**
@@ -19,6 +20,20 @@ final class PaginationControl extends Control
     public function getPaginator(): Paginator
     {
         return $this->paginator;
+    }
+
+    /**
+     * Enable or disable AJAX mode
+     * 
+     * @param bool $isAjax
+     * 
+     * @return static
+     */
+    public function isAjax(bool $isAjax = true): static
+    {
+        $this->isAjax = $isAjax;
+
+        return $this;
     }
 
     /**
@@ -70,7 +85,8 @@ final class PaginationControl extends Control
     {
         $this->template->paginator = $this->paginator;
         $this->template->presenter = $this->getPresenter();
-        
+        $this->template->isAjax = $this->isAjax;
+
         $this->template->render(__DIR__ . '/pagination.latte');
     }
 

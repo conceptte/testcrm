@@ -208,6 +208,11 @@
         .email:hover {
             color: var(--accent);
         }
+
+        .smaller {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
     }
 }
 
@@ -218,22 +223,23 @@
 }
 
 </style>
-<div n:block=title class="page-title">Customers <em>({$totalCount})</em></div>
+<div n:block=title class="page-title">Customers <em n:snippet="totalCount">({$totalCount})</em></div>
 <div class="filters">
-    <div class="status">
-        <a n:href="this, page: 1, q: $q ?: null, status: null" n:class="chip, $status === null ? 'is-active'">All</a>
-        <a n:href="this, page: 1, q: $q ?: null, status: active" n:class="chip, $status === 'active' ? 'is-active'">Active</a>
-        <a n:href="this, page: 1, q: $q ?: null, status: inactive" n:class="chip, $status === 'inactive' ? 'is-active'">Inactive</a>
+    <div n:snippet="statusControls" class="status">
+        <a n:href="this, page: 1, q: $q ?: null, status: null" n:class="ajax, chip, $status === null ? 'is-active'">All</a>
+        <a n:href="this, page: 1, q: $q ?: null, status: active" n:class="ajax, chip, $status === 'active' ? 'is-active'">Active</a>
+        <a n:href="this, page: 1, q: $q ?: null, status: inactive" n:class="ajax, chip, $status === 'inactive' ? 'is-active'">Inactive</a>
     </div>
-
-    <form method="GET" action="{link this}">
-        <input type="search" name="q" value="{$q}" placeholder="Search by name or email" aria-label="Search by name or email">
-        <input n:if="$status !== null" type="hidden" name="status" value="{$status}">
-        <button type="submit">Search</button>
-        <button n:if="$q" type="submit" name="q" value="">Clear</button>
-    </form>
+    <div n:snippet="searchForm">
+        <form action="{link this}" class="ajax">
+            <input type="search" name="q" value="{$q}" placeholder="Search by name or email" aria-label="Search by name or email">
+            <input n:if="$status !== null" type="hidden" name="status" value="{$status}" class="ajax">
+            <button type="submit">Search</button>
+            <button n:if="$q" type="submit" name="q" value="">Clear</button>
+        </form>
+    </div>
 </div>
-<div class="customer-list">
+<div n:snippet="customersList" class="customer-list">
     
     <article n:foreach="$customers as $customer" class="card">
         <div class="header">
@@ -248,11 +254,13 @@
             <div class="row">
                 <span class="email">{$customer->email}</span>
             </div>
-            <div class="row">
-                {$customer->activities_count} Activities &middot; {$customer->comments_count} Comments
+            <div class="row smaller">
+                <em>{$customer->activities_count} Activities &middot; {$customer->comments_count} Comments</em>
             </div>
         </div>
     </article>
 </div>
-{control pagination}
+<div n:snippet="paginatorContainer">
+    {control pagination}
+</div>
 {/block}

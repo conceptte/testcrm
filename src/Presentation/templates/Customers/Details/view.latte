@@ -151,22 +151,26 @@
         <div class="body">
             <div class="activities">
                 <h2>Activities</h2>
-                <div n:foreach="$activities as $activity" class="activity">
-                    <div class="header">
-                        <span class="type">{$activity->type}</span>
-                        <span class="date">{$activity->created_at|date:'Y-m-d H:i'}</span>
-                    </div>
+                <div n:snippet="activityList">
+                    <div n:foreach="$activities as $activity" class="activity">
+                        <div class="header">
+                            <span class="type">{$activity->type}</span>
+                            <span class="date">{$activity->created_at|date:'Y-m-d H:i'}</span>
+                        </div>
 
-                    <div class="content">
-                        {$activity->details}
-                    </div>
-                    <div class="actions">
-                        <a class="comments" href="{link Activity:view, id => $customer->public_id, activity => $activity->id, page: null}">
-                            {$activity->comments_count} Comments
-                        </a>
+                        <div class="content">
+                            {$activity->details}
+                        </div>
+                        <div class="actions">
+                            <a class="comments" href="{link Activity:view, id => $customer->public_id, activity => $activity->id, page: null}">
+                                {$activity->comments_count} Comments
+                            </a>
+                        </div>
                     </div>
                 </div>
-                {control pagination}
+                <div n:snippet="paginatorContainer">
+                    {control pagination}
+                </div>
             </div>
         </div>
     </section>

@@ -29,13 +29,13 @@
     }
 </style>
 <nav n:if="$paginator->getPageCount() > 1" class="pagination" aria-label="Pagination">
-    <a n:if="!$paginator->isFirst()" href="{$control->pageLink($paginator->getPage() - 1)}" class="link">
+    <a n:if="!$paginator->isFirst()" href="{$control->pageLink($paginator->getPage() - 1)}" class="link {$isAjax ? 'ajax' : ''}">
         Previous
     </a>
     <span class="pagination__current">
         Page {$paginator->getPage()} / {$paginator->getPageCount()}
     </span>
-    <a n:if="!$paginator->isLast()" href="{$control->pageLink($paginator->getPage() + 1)}" class="link">
+    <a n:if="!$paginator->isLast()" href="{$control->pageLink($paginator->getPage() + 1)}" class="link {$isAjax ? 'ajax' : ''}">
         Next
     </a>
 </nav>

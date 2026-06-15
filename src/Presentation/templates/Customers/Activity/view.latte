@@ -14,24 +14,40 @@
 
         .header {
             display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
             gap: 0.55rem;
+            align-items: center;
             padding: 1rem;
             border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+             a {
+                text-decoration: none;
+             }   
+             .avatar {
+                width: 2.5rem;
+                height: 2.5rem;
+                border-radius: 999px;
+                display: grid;
+                place-items: center;
+                font-size: 0.86rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: var(--accent);
+                background: var(--accent-soft);
+            }
 
             .title {
-                color: var(--text);
-                text-decoration: none;
-                font-size: clamp(1rem, 0.95rem + 0.32vw, 1.2rem);
+                min-width: 0;
+                font-size: clamp(1rem, 0.96rem + 0.25vw, 1.2rem);
                 font-weight: 650;
                 letter-spacing: 0.01em;
-
-                &:hover {
-                    color: var(--accent);
-                }
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
 
             .meta {
                 display: flex;
+                grid-column: 1 / -1;
                 gap: 0.5rem;
                 align-items: center;
                 flex-wrap: wrap;
@@ -115,6 +131,7 @@
 <section class="activity-view">
     <article class="card">
         <div class="header">
+            <span class="avatar">{$customer->name|substr:0,2}</span>
             <a href="{link :MiniCRM:Customers:Details:view, id => $customer->public_id, page: null}" class="title">
                 {$customer->name}
             </a>
@@ -133,17 +150,31 @@
 
     <div class="comments">
         <h2>Comments ({$totalCount})</h2>
-        <div n:foreach="$comments as $comment" class="comment">
-            <div class="header">
-                <span class="date">{$comment->created_at|date:'Y-m-d H:i'}</span>
+        <div class="add-comment">
+            <form method="POST" action="{link comment, id => $customer->public_id, activity => $activity->id}" class="ajax">
+                <textarea name="comment" rows="3" placeholder="Add a comment..." required></textarea>
+                <button type="submit">Add Comment</button>
+            </form>
+             
+        </div>
+        <div n:snippet="commentsList">
+            <div n:if="$totalCount === 0" class="empty-state">
+                No comments yet.
             </div>
+            <div n:foreach="$comments as $comment" class="comment">
+                <div class="header">
+                    <span class="date">{$comment->created_at|date:'Y-m-d H:i'}</span>
+                </div>
 
-            <div class="content">
-                {$comment->comment}
+                <div class="content">
+                    {$comment->comment}
+                </div>
             </div>
         </div>
 
-        {control pagination}
+        <div n:snippet="paginatorContainer">
+            {control pagination}
+        </div>
     </div>
 </section>
 {/block}
