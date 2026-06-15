@@ -403,6 +403,9 @@
             }
 
             .title {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
                 min-width: 0;
                 font-size: clamp(1rem, 0.96rem + 0.25vw, 1.2rem);
                 font-weight: 650;
@@ -410,6 +413,16 @@
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+
+                .back {
+                    flex: none;
+                    color: var(--muted);
+                    font-size: 0.95em;
+                }
+
+                .avatar {
+                    flex: none;
+                }
             }
 
             .status {
@@ -542,6 +555,9 @@
             }
 
             .title {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
                 min-width: 0;
                 font-size: clamp(1rem, 0.96rem + 0.25vw, 1.2rem);
                 font-weight: 650;
@@ -549,6 +565,16 @@
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+
+                .back {
+                    flex: none;
+                    color: var(--muted);
+                    font-size: 0.95em;
+                }
+
+                .avatar {
+                    flex: none;
+                }
             }
 
             .meta {

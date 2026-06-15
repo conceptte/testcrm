@@ -2,8 +2,9 @@
 <section class="activity-view">
     <article class="card">
         <div class="header">
-            <span class="avatar">{$customer->name|substr:0,2}</span>
             <a href="{link :MiniCRM:Customers:Details:view, id => $customer->public_id, page: null}" class="title">
+                <span class="back" aria-hidden="true">&larr;</span>
+                <span class="avatar">{$customer->name|substr:0,2}</span>
                 {$customer->name}
             </a>
             <div class="meta">
