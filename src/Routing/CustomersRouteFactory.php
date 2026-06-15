@@ -18,12 +18,7 @@ final class CustomersRouteFactory
     {
         $router = new RouteList();
 
-        $router->addRoute('minicrm', [
-            'presenter' => 'Customers',
-            'action' => 'index',
-        ]);
-
-        $router->addRoute('minicrm/customers', [
+        $router->addRoute('minicrm[/customers]', [
             'presenter' => 'Customers',
             'action' => 'index',
         ]);
