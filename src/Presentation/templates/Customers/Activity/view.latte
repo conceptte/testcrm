@@ -151,11 +151,13 @@
     <div class="comments">
         <h2>Comments ({$totalCount})</h2>
         <div class="add-comment">
-            <form method="POST" action="{link comment, id => $customer->public_id, activity => $activity->id}" class="ajax">
+            <!--form method="POST" action="{link comment, id => $customer->public_id, activity => $activity->id}" class="ajax">
                 <textarea name="comment" rows="3" placeholder="Add a comment..." required></textarea>
                 <button type="submit">Add Comment</button>
-            </form>
-             
+            </form-->
+            <div n:snippet="commentForm">
+                {control commentForm}
+            </div>
         </div>
         <div n:snippet="commentsList">
             <div n:if="$totalCount === 0" class="empty-state">
