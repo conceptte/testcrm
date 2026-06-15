@@ -28,7 +28,7 @@ final class CustomersRouteFactory
             'action' => 'index',
         ]);
 
-        $router->addRoute('minicrm/customers/<id>[/<action>]', [
+        $router->addRoute('minicrm/customers/<id>', [
             'presenter' => 'Customers:Details',
             'action' => 'view',
         ]);
