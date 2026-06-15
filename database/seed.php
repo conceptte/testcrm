@@ -45,7 +45,7 @@ for ($i = 0; $i < 100; $i++) {
             'created_at' => $faker->dateTimeBetween('-1 year'),
         ]);
 
-        $commentsCount = random_int(0, 5);
+        $commentsCount = random_int(0, 30);
 
         for ($k = 0; $k < $commentsCount; $k++) {
 
