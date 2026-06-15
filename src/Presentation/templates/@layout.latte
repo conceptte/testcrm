@@ -16,6 +16,8 @@
 		});
 	</script>
 
+	<script src="https://unpkg.com/nette-forms@3"></script>
+
 	<style>
 		:root {
 			--bg: #0b1220;
@@ -159,8 +161,9 @@
 			</nav>
 		</header>
 
-		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
-
+		<div n:snippet="flashes">
+			<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+		</div>
 		<main class="main">
 			{include content}
 		</main>
