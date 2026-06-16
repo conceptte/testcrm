@@ -2,12 +2,14 @@
 
 namespace Mtr\MiniCRM\Presentation;
 
+use Mtr\MiniCRM\Exception\MiniCRMException;
 use Mtr\MiniCRM\Presentation\Components\Pagination\AwarePaginator;
 use Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl;
 use Mtr\MiniCRM\Presentation\MiniCRMPresenter;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
 use Mtr\MiniCRM\Repository\Customers\CustomerStatus;
 use Nette\Application\Attributes\Persistent;
+use Throwable;
 
 class CustomersPresenter extends MiniCRMPresenter
 {
@@ -37,35 +39,46 @@ class CustomersPresenter extends MiniCRMPresenter
      */
     public function renderIndex(): void
     {
-        $status = $this->status !== null ? strtolower(trim($this->status)) : null;
-        
-        $isActive = CustomerStatus::isActive($status);
+        try {
+            $status = $this->status !== null ? strtolower(trim($this->status)) : null;
+            
+            $isActive = CustomerStatus::isActive($status);
 
-        $customers = $this->customersRepository->search(
-            $this->q,
-            $isActive,
-            $this->sort
-        )
-        ->page($this->page(), CustomersRepositoryInterface::PAGE_SIZE);
+            $customers = $this->customersRepository->search(
+                $this->q,
+                $isActive,
+                $this->sort
+            )
+                ->page($this->page(), CustomersRepositoryInterface::PAGE_SIZE);
 
-        $totalCount = $this->customersRepository->count($customers);
+            $totalCount = $this->customersRepository->count($customers);
 
-        $this->paginationControl
-            ->isAjax()
-            ->count($totalCount)
-            ->pageSize(CustomersRepositoryInterface::PAGE_SIZE)
-            ->page($this->page());
+            $this->paginationControl
+                ->isAjax()
+                ->count($totalCount)
+                ->pageSize(CustomersRepositoryInterface::PAGE_SIZE)
+                ->page($this->page());
 
-        $this->template->q = trim((string) $this->q);
-        $this->template->status = $status;
-        $this->template->sort = $this->sort;
-        $this->template->isActive = $isActive;
-        $this->template->totalCount = $totalCount;
+            $this->template->q = trim((string) $this->q);
+            $this->template->status = $status;
+            $this->template->sort = $this->sort;
+            $this->template->isActive = $isActive;
+            $this->template->totalCount = $totalCount;
 
-        $this->template->customers = $customers;
+            $this->template->customers = $customers;
 
-        if ($this->isAjax()) {
-            $this->redrawAllControls();
+            if ($this->isAjax()) {
+                $this->redrawAllControls();
+            }
+
+        } catch (MiniCRMException $e) {
+
+            $this->error($e->getMessage());
+
+        } catch (Throwable $e) {
+
+            $this->error('An error occurred');
+
         }
 
     }

@@ -3,6 +3,8 @@
 namespace Mtr\MiniCRM\Presentation\Customers;
 
 use Mtr\MiniCRM\Exception\Comment\ValidationException;
+use Mtr\MiniCRM\Exception\MiniCRMException;
+use Mtr\MiniCRM\Exception\NotFoundException;
 use Mtr\MiniCRM\Presentation\Components\Pagination\AwarePaginator;
 use Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl;
 use Mtr\MiniCRM\Presentation\MiniCRMPresenter;
@@ -39,36 +41,46 @@ class ActivityPresenter extends MiniCRMPresenter
      */
     public function renderView(string $id, int $activity ): void
     {
-        $customer = $this->customersRepository->byPublicId($id);
+        try {
+            $customer = $this->customersRepository->byPublicId($id);
 
-        $activity = $this->activityRepository->get($activity);
+            $activity = $this->activityRepository->get($activity);
 
-        if ($activity === null) {
-            $this->error('Activity not found');
-        }
+            if ($activity === null) {
+                throw new NotFoundException('Activity not found');
+            }
 
-        if ($activity->customer_id !== $customer->id) {
-            $this->error('Activity does not belong to this customer');
-        }
+            if ($activity->customer_id !== $customer->id) {
+                throw new NotFoundException('Activity does not belong to this customer');
+            }
 
-        $comments = $this->commentsRepository->byActivity($activity)
-            ->page($this->page(), self::PAGE_SIZE);
-        
-        $totalCount = $activity->related('activity_comments')->count();
+            $comments = $this->commentsRepository->byActivity($activity)
+                ->page($this->page(), self::PAGE_SIZE);
+            
+            $totalCount = $activity->related('activity_comments')->count();
 
-        $this->paginationControl
-            ->isAjax()
-            ->count($totalCount)
-            ->pageSize(self::PAGE_SIZE)
-            ->page($this->page());
-        
-        $this->template->customer = $customer;
-        $this->template->activity = $activity;
-        $this->template->comments = $comments;
-        $this->template->totalCount = $totalCount;
+            $this->paginationControl
+                ->isAjax()
+                ->count($totalCount)
+                ->pageSize(self::PAGE_SIZE)
+                ->page($this->page());
+            
+            $this->template->customer = $customer;
+            $this->template->activity = $activity;
+            $this->template->comments = $comments;
+            $this->template->totalCount = $totalCount;
 
-        if ($this->isAjax()) {
-            $this->redrawAllControls();
+            if ($this->isAjax()) {
+                $this->redrawAllControls();
+            }
+
+        } catch (MiniCRMException $e) {
+
+            $this->error($e->getMessage());
+
+        } catch (\Throwable $e) {
+
+            $this->error('An error occurred');
         }
     }
 

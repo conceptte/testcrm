@@ -2,11 +2,14 @@
 
 namespace Mtr\MiniCRM\Presentation\Customers;
 
+use Mtr\MiniCRM\Exception\MiniCRMException;
+use Mtr\MiniCRM\Exception\NotFoundException;
 use Mtr\MiniCRM\Presentation\Components\Pagination\AwarePaginator;
 use Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl;
 use Mtr\MiniCRM\Presentation\MiniCRMPresenter;
 use Mtr\MiniCRM\Repository\Customers\Activity\ActivityRepositoryInterface;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
+use Throwable;
 
 class DetailsPresenter extends MiniCRMPresenter
 {
@@ -29,27 +32,35 @@ class DetailsPresenter extends MiniCRMPresenter
      */
     public function renderView(string $id): void
     {
-        
-        $customer = $this->customersRepository->byPublicId($id);
+        try {
+            $customer = $this->customersRepository->byPublicId($id);
 
-        if ($customer === null) {
-            $this->error('Customer not found');
-        }
+            if ($customer === null) {
+                throw new NotFoundException('Customer not found');
+            }
 
-        $activities = $this->activityRepository->byCustomer($customer)
-            ->page($this->page(), self::PAGE_SIZE);
+            $activities = $this->activityRepository->byCustomer($customer)
+                ->page($this->page(), self::PAGE_SIZE);
 
-        $this->paginationControl
-            ->isAjax()
-            ->count($this->customersRepository->count($activities))
-            ->pageSize(self::PAGE_SIZE)
-            ->page($this->page());
+            $this->paginationControl
+                ->isAjax()
+                ->count($this->customersRepository->count($activities))
+                ->pageSize(self::PAGE_SIZE)
+                ->page($this->page());
 
-        $this->template->customer = $customer;
-        $this->template->activities = $activities;
+            $this->template->customer = $customer;
+            $this->template->activities = $activities;
 
-        if ($this->isAjax()) {
-            $this->redrawAllControls();
+            if ($this->isAjax()) {
+                $this->redrawAllControls();
+            }
+        } catch (MiniCRMException $e) {
+
+            $this->error($e->getMessage());
+
+        } catch (Throwable $e) {
+
+            $this->error('An error occurred');
         }
     }
 
