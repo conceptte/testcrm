@@ -1,13 +1,15 @@
 <?php
 namespace Mtr\MiniCRM\API\V1\Presentation;
 
+use Mtr\MiniCRM\API\V1\Exception\ApiExceptionInterface;
+use Mtr\MiniCRM\API\V1\Exception\NotFoundException;
 use Mtr\MiniCRM\API\V1\Presentation\ApiPresenter;
-use Mtr\MiniCRM\API\V1\Resource\CustomerCollectionResource;
 use Mtr\MiniCRM\API\V1\Resource\CustomerResource;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
 use Mtr\MiniCRM\Repository\Customers\CustomerStatus;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Throwable;
 
 class CustomersPresenter extends ApiPresenter
 {
@@ -30,21 +32,30 @@ class CustomersPresenter extends ApiPresenter
         int $limit = self::PAGE_SIZE
     ): void
     {
-        $limit = min($limit, self::MAX_PAGE_SIZE);
+        try{
+            $limit = min($limit, self::MAX_PAGE_SIZE);
 
-        $active = CustomerStatus::isActive($status);
+            $active = CustomerStatus::isActive($status);
 
-        $customers = $this->search($q, $active)->page($page, $limit);
+            $customers = $this->search($q, $active)->page($page, $limit);
 
-        $this->sendJson([
-            'data' => iterator_to_array($this->formatCustomers($customers)),
-            'meta' => $this->formatMetadata($customers, [
-                'q' => $q,
-                'status' => $status,
-                'page' => $page,
-                'limit' => $limit,
-            ]),
-        ]);
+            if ($customers->count() < 1) {
+                throw new NotFoundException('No customers found');
+            }
+
+            $apiData = $this->formatApiData($customers, $q, $status, $page, $limit);
+            
+        } catch (ApiExceptionInterface $e) {
+
+            $apiData = $this->errorData($e->getMessage());
+
+        } catch (Throwable $e) {
+
+            $apiData = $this->errorData();
+
+        }
+
+        $this->sendJson($apiData);
     }
 
     /**
@@ -59,6 +70,37 @@ class CustomersPresenter extends ApiPresenter
     }
 
     /**
+     * @param Selection $customers
+     * @param string $q
+     * @param string $status
+     * @param int $page
+     * @param int $limit
+     * 
+     * @return array
+     */
+    private function formatApiData(Selection $customers, string $q, string $status, int $page, int $limit): array
+    {
+        $total = $this->customerRepository->count($customers);
+
+        return [
+            'success' => true,
+            'request' => [
+                'q' => $q,
+                'status' => $status,
+                'page' => $page,
+                'limit' => $limit,
+            ],
+            'pagination' => [
+                'total' => $total,
+                'current' => $page ?? 1,
+                'per_page' => $limit,
+                'total_pages' => ceil($total / $limit),
+            ],
+            'data' => iterator_to_array($this->formatCustomers($customers)),
+        ];
+    }
+
+    /**
      * @param Selection $selection
      * 
      * @return \Generator
@@ -68,26 +110,6 @@ class CustomersPresenter extends ApiPresenter
         foreach ($selection as $customer) {
             yield CustomerResource::fromRow($customer, $this->addons($customer));
         }
-    }
-
-    /**
-     * @param Selection $selection
-     * @param array $params
-     * 
-     * @return array
-     */
-    private function formatMetadata(Selection $selection, array $params): array
-    {
-        $total = $this->customerRepository->count($selection);
-        return [
-            'params' => $params,
-            'pagination' => [
-                'total' => $total,
-                'current' => $params['page'] ?? 1,
-                'per_page' => self::PAGE_SIZE,
-                'total_pages' => ceil($total / self::PAGE_SIZE),
-            ],
-        ];
     }
 
     /**

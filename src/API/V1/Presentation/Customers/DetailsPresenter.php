@@ -1,12 +1,14 @@
 <?php
 namespace Mtr\MiniCRM\API\V1\Presentation\Customers;
 
+use Mtr\MiniCRM\API\V1\Exception\ApiExceptionInterface;
+use Mtr\MiniCRM\API\V1\Exception\NotFoundException;
+use Mtr\MiniCRM\API\V1\Presentation\ApiPresenter;
 use Mtr\MiniCRM\API\V1\Resource\CustomerResource;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
-use Nette\Application\UI\Presenter;
-use Nette\Database\Table\ActiveRow;
+use Throwable;
 
-class DetailsPresenter extends Presenter
+class DetailsPresenter extends ApiPresenter
 {
     public function __construct(
         private CustomersRepositoryInterface $customerRepository
@@ -22,11 +24,26 @@ class DetailsPresenter extends Presenter
      */
     public function actionIndex(string $id): void
     {
-        if (!$customer = $this->customerRepository->byPublicId($id)) {
-            $this->sendJson(['error' => 'Customer not found']);
+        try {
+            if (!$customer = $this->customerRepository->byPublicId($id)) {
+                throw new NotFoundException('Customer not found');
+            }
+
+            $apiData = [
+                'success' => true,
+                'data' => CustomerResource::fromRow($customer),
+            ];
+
+        } catch (ApiExceptionInterface $e) {
+
+            $apiData = $this->errorData('Customer not found');
+
+        } catch (Throwable $e) {
+
+            $apiData = $this->errorData();
         }
 
-        $this->sendJson(CustomerResource::fromRow($customer));
+        $this->sendJson($apiData);
     }
 
     

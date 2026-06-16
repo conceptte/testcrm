@@ -233,48 +233,47 @@ GET /minicrm/api/v1/customers?q=<name_or_email>&status=<active|inactive>&page=<p
 Response includes customer list and meta info:
 ```json
 {
+  "success": true,
+  "request": {
+    "q": "",
+    "status": "active",
+    "page": 1,
+    "limit": 2
+  },
+  "pagination": {
+    "total": 51,
+    "current": 1,
+    "per_page": 2,
+    "total_pages": 26
+  },
   "data": [
     {
-      "id": "c6a2ffb454ac1c",
-      "name": "Sadie Block",
-      "email": "name.borer@example.net",
+      "id": "c6a30f25d0f3bd",
+      "name": "Daija Daniel",
+      "email": "jherman@example.net",
       "is_active": true,
       "totals": {
-        "total_activities": 47,
-        "total_comments": 680
+        "total_activities": 15,
+        "total_comments": 265
       },
       "links": {
-        "self": "/minicrm/api/v1/customers/c6a2ffb454ac1c"
+        "self": "/minicrm/api/v1/customers/c6a30f25d0f3bd"
       }
     },
     {
-      "id": "c6a2ffb4689703",
-      "name": "Dr. Kaia Prohaska I",
-      "email": "dthompson@example.net",
+      "id": "c6a30f25da72c8",
+      "name": "Bette Satterfield",
+      "email": "juana.ernser@example.net",
       "is_active": true,
       "totals": {
-        "total_activities": 20,
-        "total_comments": 312
+        "total_activities": 44,
+        "total_comments": 738
       },
       "links": {
-        "self": "/minicrm/api/v1/customers/c6a2ffb4689703"
+        "self": "/minicrm/api/v1/customers/c6a30f25da72c8"
       }
     }
-  ],
-  "meta": {
-    "params": {
-      "q": "",
-      "status": "active",
-      "page": 2,
-      "limit": 2
-    },
-    "pagination": {
-      "total": 54,
-      "current": 2,
-      "per_page": 10,
-      "total_pages": 6
-    }
-  }
+  ]
 }
 ```
 
@@ -286,14 +285,18 @@ GET /minicrm/api/v1/customers/{public_id}
 Response includes customer info and some metadata:
 ```json
 {
-  "id": "c6a2ffb454ac1c",
-  "name": "Sadie Block",
-  "email": "name.borer@example.net",
-  "is_active": true,
-  "totals": {
-    "total_activities": 47,
-    "total_comments": 680
-  }
+  "success": true,
+  "data": {
+    "id": "c6a30f25d0f3bd",
+    "name": "Daija Daniel",
+    "email": "jherman@example.net",
+    "is_active": true,
+    "totals": {
+      "total_activities": 15,
+      "total_comments": 265
+    }
+  },
+  "meta": []
 }
 ```
 
