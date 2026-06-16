@@ -36,6 +36,10 @@ That gives a few clear benefits:
 
 Main gap of extension in current version:
 - Asset pipeline is limited: styles are kept in Latte layout blocks, not in fully separate built assets.
+- Sorting and filtering is basic, no complex queries or UI for that.
+- No rate limiting or other protections for API endpoints.
+- Error handling is basic, just showing messages without logging or detailed responses.
+- No tests included, so it's not covered for edge cases or regressions.
 
 
 
