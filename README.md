@@ -157,6 +157,11 @@ public static function create(): RouteList
         'action' => 'index',
     ]);
 
+    $router->addRoute('minicrm/customers/quick-search', [
+            'presenter' => 'Customers:QuickSearch',
+            'action' => 'default',
+        ]);
+
     $router->addRoute('minicrm/customers/<id>', [
         'presenter' => 'Customers:Details',
         'action' => 'view',
