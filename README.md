@@ -8,6 +8,9 @@ I went throwgh such opics as:
     - configuration
     - bootstrap and services registration
 - Dependency injection
+    - services registration and usage
+    - constructor injection
+    - Attributes for DI
 - Routing for clean URLs
     - route definitions
 - Presenters

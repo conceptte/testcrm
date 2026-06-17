@@ -7,10 +7,12 @@ use Mtr\MiniCRM\API\V1\Exception\NotFoundException;
 use Mtr\MiniCRM\API\V1\Request\CustomersRequest;
 use Mtr\MiniCRM\API\V1\Request\CustomersRequestFactory;
 use Mtr\MiniCRM\API\V1\Resource\Customers\CustomerCollectionResourceFactory;
+use Mtr\MiniCRM\API\V1\Resource\Paginator\PaginatorResourceFactory;
 use Mtr\MiniCRM\API\V1\Resource\PaginatorResource;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
 use Mtr\MiniCRM\Repository\Customers\CustomerStatus;
 use Nette\Database\Table\Selection;
+use Nette\DI\Attributes\Inject;
 use Throwable;
 
 class CustomersPresenter extends ApiPresenter
@@ -20,6 +22,9 @@ class CustomersPresenter extends ApiPresenter
 
     const META_REQUEST = 'request';
     const META_PAGINATION = 'pagination';
+
+    #[Inject]
+    public PaginatorResourceFactory $paginatorResourceFactory;
 
     public function __construct(
         private CustomersRequestFactory $requestFactory,
@@ -108,7 +113,7 @@ class CustomersPresenter extends ApiPresenter
         int $limit
     ): PaginatorResource
     {
-        return new PaginatorResource(
+        return $this->paginatorResourceFactory->createResource(
             total: $count,
             current: $page,
             perPage: $limit,
