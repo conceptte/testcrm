@@ -2,15 +2,15 @@
 <div n:block=title class="page-title">Customers <em n:snippet="totalCount">({$totalCount})</em></div>
 <div class="filters">
     <div n:snippet="statusControls" class="status">
-        <a n:href="this, page: 1, status: null" n:class="ajax, chip, $status === null ? 'is-active'">All</a>
-        <a n:href="this, page: 1, status: active" n:class="ajax, chip, $status === 'active' ? 'is-active'">Active</a>
-        <a n:href="this, page: 1, status: inactive" n:class="ajax, chip, $status === 'inactive' ? 'is-active'">Inactive</a>
+        <a n:href="this, page: null, status: null" n:class="ajax, chip, $status === null ? 'is-active'">All</a>
+        <a n:href="this, page: null, status: active" n:class="ajax, chip, $status === 'active' ? 'is-active'">Active</a>
+        <a n:href="this, page: null, status: inactive" n:class="ajax, chip, $status === 'inactive' ? 'is-active'">Inactive</a>
     </div>
     <div n:snippet="searchForm">
-        <form action="{link this}" class="ajax search-form">
+        <form action="{link this, page: 1}" class="ajax search-form">
             <input id="quick-search" type="search" name="q" value="{$q}" placeholder="Search by name or email" aria-label="Search by name or email">
             <button type="submit">Search</button>
-            <button n:if="$q" type="submit" name="q" value="">Clear</button>
+            <a n:if="$q" href="{link this, page: null, q: null}" class="clear">Clear</a>
             <div id="search-suggestions" 
                 data-url="{link :MiniCRM:Customers:QuickSearch:default}"
                 class="search-suggestions">
@@ -24,7 +24,7 @@
         </script>
     </div>
     <div n:snippet="sortControls" class="sort">
-        <form action="{link this}" class="ajax">
+        <form action="{link this, page: null, sort: null}" class="ajax">
             <label for="sort">Sort by:</label>
             <select id="sort" name="sort" onchange="this.form.requestSubmit()">
                 <option value="a-z" selected={$sort === 'a-z' || $sort === null}>A-Z</option>
@@ -36,7 +36,9 @@
     </div>
 </div>
 <div n:snippet="customersList" class="customer-list">
-    
+    <div n:if="$totalCount === 0" class="empty-state">
+        No customers found.
+    </div>
     <article n:foreach="$customers as $customer" class="card">
         <div class="header">
             <span class="avatar">{$customer->name|substr:0,2}</span>
