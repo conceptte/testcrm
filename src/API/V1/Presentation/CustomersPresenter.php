@@ -2,8 +2,9 @@
 
 namespace Mtr\MiniCRM\API\V1\Presentation;
 
+use Nette\Database\Table\Selection;
+use Nette\DI\Attributes\Inject;
 use Mtr\MiniCRM\API\V1\Exception\ApiExceptionInterface;
-use Mtr\MiniCRM\API\V1\Exception\NotFoundException;
 use Mtr\MiniCRM\API\V1\Request\CustomersRequest;
 use Mtr\MiniCRM\API\V1\Request\CustomersRequestFactory;
 use Mtr\MiniCRM\API\V1\Resource\Customers\CustomerCollectionResourceFactory;
@@ -11,8 +12,6 @@ use Mtr\MiniCRM\API\V1\Resource\Paginator\PaginatorResourceFactory;
 use Mtr\MiniCRM\API\V1\Resource\PaginatorResource;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
 use Mtr\MiniCRM\Repository\Customers\CustomerStatus;
-use Nette\Database\Table\Selection;
-use Nette\DI\Attributes\Inject;
 use Throwable;
 
 class CustomersPresenter extends ApiPresenter
@@ -92,10 +91,6 @@ class CustomersPresenter extends ApiPresenter
                 CustomerStatus::isActive($request->status)
             )
             ->page($request->page, $request->limit);
-        
-        if ($customers->count() < 1) {
-            throw new NotFoundException('No customers found');
-        }
 
         return $customers;
     }
