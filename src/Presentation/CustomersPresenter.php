@@ -66,6 +66,7 @@ class CustomersPresenter extends MiniCRMPresenter
             $this->template->totalCount = $totalCount;
 
             $this->template->customers = $customers;
+            $this->template->suggestions = new \stdClass(); // for search suggestions
 
             if ($this->isAjax()) {
                 $this->redrawAllControls();

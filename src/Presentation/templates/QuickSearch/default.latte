@@ -1,0 +1,14 @@
+{if count($suggestions) === 0}
+    <div class="card">
+        <div class="header">
+            No results found.
+        </div>
+    </div>
+{else}
+    <article n:foreach="$suggestions as $customer" class="card">
+        <div class="header">
+            <a href="{link :MiniCRM:Customers:Details:view, id => $customer->public_id, page: null}" class="title">{$customer->name}</a>
+            <span>{$customer->email}</span>
+        </div>
+    </article>
+{/if}

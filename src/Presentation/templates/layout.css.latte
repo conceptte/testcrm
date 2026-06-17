@@ -244,6 +244,52 @@
             align-items: center;
         }
 
+        .search-form {
+            position: relative;
+        }
+
+        .search-suggestions {
+            display: none;
+            position: absolute;
+            top: calc(100% + 0.3rem);
+            left: 0;
+            right: 0;
+            max-height: 15rem;
+            overflow-y: auto;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            z-index: 20;
+
+            .card {
+                margin: 0;
+                border: 0;
+                border-bottom: 1px solid var(--line);
+                border-radius: 0;
+                background: transparent;
+                box-shadow: none;
+
+                &:last-child {
+                    border-bottom: 0;
+                }
+            }
+
+            .header {
+                padding: 0.55rem 0.85rem;
+            }
+
+            .title {
+                color: var(--text);
+                text-decoration: none;
+                font-weight: 500;
+
+                &:hover {
+                    color: var(--accent);
+                }
+            }
+        }
+
         input {
             min-width: 16rem;
             max-width: 100%;

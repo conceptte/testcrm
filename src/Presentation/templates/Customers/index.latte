@@ -7,11 +7,21 @@
         <a n:href="this, page: 1, status: inactive" n:class="ajax, chip, $status === 'inactive' ? 'is-active'">Inactive</a>
     </div>
     <div n:snippet="searchForm">
-        <form action="{link this}" class="ajax">
-            <input type="search" name="q" value="{$q}" placeholder="Search by name or email" aria-label="Search by name or email">
+        <form action="{link this}" class="ajax search-form">
+            <input id="quick-search" type="search" name="q" value="{$q}" placeholder="Search by name or email" aria-label="Search by name or email">
             <button type="submit">Search</button>
             <button n:if="$q" type="submit" name="q" value="">Clear</button>
+            <div id="search-suggestions" 
+                data-url="{link :MiniCRM:Customers:QuickSearch:default}"
+                class="search-suggestions">
+            </div> 
         </form>
+        <script type="text/javascript">
+            MiniCRM.initQuickSearch(
+                document.getElementById('quick-search'),
+                document.getElementById('search-suggestions')
+            );
+        </script>
     </div>
     <div n:snippet="sortControls" class="sort">
         <form action="{link this}" class="ajax">
