@@ -33,13 +33,12 @@ class CustomerResource implements JsonSerializable
     {
         return 
             [
-                'id' => $this->customer->public_id,
                 'name' => $this->customer->name,
                 'email' => $this->customer->email,
                 'is_active' => $this->customer->is_active ? true : false,
                 'totals' => [
-                    'total_activities' => $this->customer->activities_count ?? 0,
-                    'total_comments' => $this->customer->comments_count ?? 0,
+                    'total_activities' => $this->customer->activities_count ?? 'N/A',
+                    'total_comments' => $this->customer->comments_count ?? 'N/A',
             ]
             ] + $this->params;
     }

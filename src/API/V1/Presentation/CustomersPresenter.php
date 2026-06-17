@@ -6,6 +6,9 @@ use Mtr\MiniCRM\API\V1\Exception\NotFoundException;
 use Mtr\MiniCRM\API\V1\Exception\ValidationException;
 use Mtr\MiniCRM\API\V1\Presentation\ApiPresenter;
 use Mtr\MiniCRM\API\V1\Resource\CustomerResource;
+use Mtr\MiniCRM\API\V1\Request\CustomersRequest;
+use Mtr\MiniCRM\API\V1\Resource\CustomerCollectionResource;
+use Mtr\MiniCRM\API\V1\Resource\PaginatorResource;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
 use Mtr\MiniCRM\Repository\Customers\CustomerStatus;
 use Nette\Database\Table\ActiveRow;
@@ -16,6 +19,8 @@ class CustomersPresenter extends ApiPresenter
 {
     const PAGE_SIZE = 10;
     const MAX_PAGE_SIZE = 100;
+
+    private ?CustomersRequest $request = null;
 
     public function __construct(
         private CustomersRepositoryInterface $customerRepository
@@ -33,24 +38,23 @@ class CustomersPresenter extends ApiPresenter
         int $limit = self::PAGE_SIZE
     ): void
     {
-        $request = [
-            'q' => $q,
-            'status' => $status,
-            'page' => $page,
-            'limit' => $limit,
-        ];
-
         try{
-            $this->validateParams($request);
 
-            $active = CustomerStatus::isActive($request['status']);
-            $customers = $this->search($request['q'], $active)->page($request['page'], $request['limit']);
+            $this->request = (new CustomersRequest(
+                query: $q,
+                status: $status ?? '',
+                page: $page,
+                limit: $limit
+            ))->validate();
+            
+            $customers = $this->search()
+                ->page($this->request->page, $this->request->limit);
 
             if ($customers->count() < 1) {
                 throw new NotFoundException('No customers found');
             }
 
-            $apiData = $this->formatApiData($customers, $request);
+            $apiData = $this->formatData($customers);
             
         } catch (ApiExceptionInterface $e) {
 
@@ -65,90 +69,59 @@ class CustomersPresenter extends ApiPresenter
         $this->sendJson($apiData);
     }
 
-    /**
-     * @param string $q
-     * @param bool|null $active
-     * 
-     * @return Selection
-     */
-    private function search(string $q, ?bool $active = null): Selection
+
+     /**
+      * @return Selection
+      */
+    private function search(): Selection
     {
-        //$active = CustomerStatus::isActive($active);
-        return $this->customerRepository->search($q, $active);
+        return $this->customerRepository
+            ->search(
+                $this->request->query, 
+                CustomerStatus::isActive($this->request->status)
+            );
     }
 
     /**
      * @param Selection $customers
-     * @param array{q:string,status:?string,page:int,limit:int} $request
      * 
      * @return array
      */
-    private function formatApiData(
-        Selection $customers, 
-        array $request
-    ): array
+    private function formatData(Selection $customers)
     {
-        $total = $this->customerRepository->count($customers);
+        return  [
+                'success' => true,
+                'request' => $this->request,
+                'pagination' => $this->getPaginatorResource($customers),
+                'data' => $this->getCustomerCollectionResource($customers)
+            ];
+    }  
 
-        return [
-            'success' => true,
-            'request' => $request,
-            'pagination' => [
-                'total' => $total,
-                'current' => $request['page'],
-                'per_page' => $request['limit'],
-                'total_pages' => ceil($total / $request['limit']),
-            ],
-            'data' => iterator_to_array($this->formatCustomers($customers)),
-        ];
+    /**
+     * @param Selection $customers
+     * 
+     * @return CustomerCollectionResource
+     */
+    private function getCustomerCollectionResource(Selection $customers): CustomerCollectionResource
+    {
+        return new CustomerCollectionResource(
+            customers: $customers,
+            linkGenerator: fn(string $path, array $params = []) => $this->link($path, $params)
+        );
     }
 
     /**
-     * @param Selection $selection
+     * @param Selection $customers
      * 
-     * @return \Generator
+     * @return PaginatorResource
      */
-    private function formatCustomers(Selection $selection): \Generator
+    private function getPaginatorResource(Selection $customers): PaginatorResource
     {
-        foreach ($selection as $customer) {
-            yield CustomerResource::fromRow($customer, $this->addons($customer));
-        }
-    }
-
-    /**
-     * @param ActiveRow $customer
-     * 
-     * @return array
-     */
-    private function addons(ActiveRow $customer): array
-    {
-        return [
-            'links' => [
-                'self' => $this->link('Customers:Details:', ['id' => $customer->public_id]),
-            ],
-        ];
-    }
-
-    /**
-     * 
-     * @param array{q:string,status:?string,page:int,limit:int} $request
-     * 
-     * @return void
-     * 
-     * @throws ValidationException
-     */
-    private function validateParams(array $request): void
-    {
-        if ($request['page'] < 1) {
-            throw new ValidationException('Page must be greater than 0');
-        }
-
-        if ($request['limit'] < 1 || $request['limit'] > self::MAX_PAGE_SIZE) {
-            throw new ValidationException('Limit must be between 1 and ' . self::MAX_PAGE_SIZE);
-        }
-
-        if ($request['status'] && !CustomerStatus::isValid($request['status'])) {
-            throw new ValidationException('Invalid status value');
-        }
+        return new PaginatorResource(
+            total: $customers->count('*'),
+            current: $this->request->page,
+            perPage: $this->request->limit,
+            totalPages: ceil($customers->count('*') / $this->request->limit),
+        );
     }
 }
