@@ -64,6 +64,5 @@
     };
 
     document.addEventListener('DOMContentLoaded', function () {
-        naja.initialize();
         MiniCRM.initialize();
     });
