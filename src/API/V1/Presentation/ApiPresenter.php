@@ -5,9 +5,6 @@ use Nette\Application\Attributes\Persistent;
 
 abstract class ApiPresenter extends \Nette\Application\UI\Presenter
 {
-    #[Persistent]
-    public string $version = 'v1';
-
     /**
      * @param string $message
      * 

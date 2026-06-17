@@ -19,4 +19,14 @@ enum CustomerStatus: string
             default => null,
         };
     }
+
+    /**
+     * @param string|null $status
+     * 
+     * @return bool
+     */
+    public static function isValid(?string $status = null): bool
+    {
+        return in_array($status, array_column(static::cases(), 'value'), true);
+    }
 }

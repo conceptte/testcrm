@@ -19,7 +19,7 @@ class RouterFactory
         $group = new RouteList();
 
         $minicrm = (new RouteList('MiniCRM'))->add(CustomersRouteFactory::create());
-        $api = (new RouteList('MiniCRMAPI'))->add(ApiRouteFactory::create());
+        $api = (new RouteList())->add(ApiRouteFactory::create());
 
         $group
             ->add($minicrm)

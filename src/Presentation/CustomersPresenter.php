@@ -64,9 +64,9 @@ class CustomersPresenter extends MiniCRMPresenter
             $this->template->sort = $this->sort;
             $this->template->isActive = $isActive;
             $this->template->totalCount = $totalCount;
-
+            $this->template->page = $this->page();
+            $this->template->limit = CustomersRepositoryInterface::PAGE_SIZE;
             $this->template->customers = $customers;
-            $this->template->suggestions = new \stdClass(); // for search suggestions
 
             if ($this->isAjax()) {
                 $this->redrawAllControls();
@@ -93,6 +93,7 @@ class CustomersPresenter extends MiniCRMPresenter
         $this->redrawControl('statusControls');
         $this->redrawControl('searchForm');
         $this->redrawControl('sortControls');
+        $this->redrawControl('apiControls');
         $this->redrawControl('totalCount');
         $this->redrawControl('customersList');
         $this->redrawControl('paginatorContainer');

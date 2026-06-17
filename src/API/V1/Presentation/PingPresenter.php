@@ -16,7 +16,7 @@ final class PingPresenter extends ApiPresenter
     {
         $this->sendJson([
             'status' => 'ok',
-            'version' => $this->version,
+            'version' => 'v1',
             'time' => DateTime::from('now')->format(DateTime::ATOM),
         ]);
     }

@@ -15,18 +15,102 @@
 	{asset 'minicrm/css/minicrm.css'}
 	{asset 'minicrm/js/minicrm.js'}
 
+	<style>
+		.bar nav {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 1rem;
+			width: 100%;
+		}
+
+		.bar .links,
+		.bar .api-links {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.45rem;
+		}
+
+		.bar .api-links {
+			margin-left: auto;
+		}
+
+		.api-link {
+			display: inline-flex;
+			align-items: center;
+			padding: 0.34rem 0.62rem;
+			border-radius: 999px;
+			border: 1px solid rgba(37, 99, 235, 0.16);
+			background: rgba(37, 99, 235, 0.06);
+			color: #1d4ed8;
+			font-size: 0.74rem;
+			font-weight: 600;
+			letter-spacing: 0.02em;
+			text-decoration: none;
+			transition: border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease;
+		}
+
+		.api-link.is-compact {
+			padding-inline: 0.55rem;
+		}
+
+		.api-link:hover,
+		.api-link:focus-visible {
+			outline: none;
+			border-color: rgba(37, 99, 235, 0.28);
+			background: rgba(37, 99, 235, 0.08);
+			color: #1e40af;
+		}
+
+		@media (max-width: 720px) {
+			.bar nav {
+				flex-wrap: wrap;
+			}
+
+			.bar .api-links {
+				margin-left: 0;
+				flex-wrap: wrap;
+			}
+		}
+
+		.filters .api {
+			margin-left: auto;
+		}
+
+		.filters .api .api-link {
+			align-self: center;
+		}
+
+		.customer-view .header {
+			grid-template-columns: auto 1fr auto auto;
+		}
+
+		.customer-view .header > div {
+			grid-column: 1 / -1;
+		}
+
+		.customer-view .header .api-links {
+			justify-self: end;
+		}
+	</style>
+
 	
 </head>
 
 <body>
 	<div class="app">
 		<header class="bar">
-
 			<nav>
-				<a n:href=":MiniCRM:Customers:index" class="brand">
-
-					<span>Customers</span>
-				</a>
+				<span class="links">
+					<a n:href=":MiniCRM:Customers:index" class="brand">
+						<span>Customers</span>
+					</a>
+				</span>
+				<span class="api-links">
+					<span>API:</span>
+					<a href="{link :MiniCRMAPIV1:Ping:pong}" target="_blank" class="api-link is-compact">ping</a>
+					<a href="{link :MiniCRMAPIV1:Customers:}" target="_blank" class="api-link is-compact">customers</a>
+				</span>
 			</nav>
 		</header>
 

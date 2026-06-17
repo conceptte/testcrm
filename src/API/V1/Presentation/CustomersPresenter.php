@@ -3,6 +3,7 @@ namespace Mtr\MiniCRM\API\V1\Presentation;
 
 use Mtr\MiniCRM\API\V1\Exception\ApiExceptionInterface;
 use Mtr\MiniCRM\API\V1\Exception\NotFoundException;
+use Mtr\MiniCRM\API\V1\Exception\ValidationException;
 use Mtr\MiniCRM\API\V1\Presentation\ApiPresenter;
 use Mtr\MiniCRM\API\V1\Resource\CustomerResource;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
@@ -25,25 +26,31 @@ class CustomersPresenter extends ApiPresenter
      * 
      * @return void
      */
-    public function actionIndex(
+    public function actionDefault(
         string $q = '', 
-        string $status = 'active',
+        ?string $status = null,
         int $page = 1, 
         int $limit = self::PAGE_SIZE
     ): void
     {
+        $request = [
+            'q' => $q,
+            'status' => $status,
+            'page' => $page,
+            'limit' => $limit,
+        ];
+
         try{
-            $limit = min($limit, self::MAX_PAGE_SIZE);
+            $this->validateParams($request);
 
-            $active = CustomerStatus::isActive($status);
-
-            $customers = $this->search($q, $active)->page($page, $limit);
+            $active = CustomerStatus::isActive($request['status']);
+            $customers = $this->search($request['q'], $active)->page($request['page'], $request['limit']);
 
             if ($customers->count() < 1) {
                 throw new NotFoundException('No customers found');
             }
 
-            $apiData = $this->formatApiData($customers, $q, $status, $page, $limit);
+            $apiData = $this->formatApiData($customers, $request);
             
         } catch (ApiExceptionInterface $e) {
 
@@ -51,7 +58,7 @@ class CustomersPresenter extends ApiPresenter
 
         } catch (Throwable $e) {
 
-            $apiData = $this->errorData();
+            $apiData = $this->errorData($e->getMessage());
 
         }
 
@@ -64,37 +71,33 @@ class CustomersPresenter extends ApiPresenter
      * 
      * @return Selection
      */
-    private function search(string $q, bool $active): Selection
+    private function search(string $q, ?bool $active = null): Selection
     {
+        //$active = CustomerStatus::isActive($active);
         return $this->customerRepository->search($q, $active);
     }
 
     /**
      * @param Selection $customers
-     * @param string $q
-     * @param string $status
-     * @param int $page
-     * @param int $limit
+     * @param array{q:string,status:?string,page:int,limit:int} $request
      * 
      * @return array
      */
-    private function formatApiData(Selection $customers, string $q, string $status, int $page, int $limit): array
+    private function formatApiData(
+        Selection $customers, 
+        array $request
+    ): array
     {
         $total = $this->customerRepository->count($customers);
 
         return [
             'success' => true,
-            'request' => [
-                'q' => $q,
-                'status' => $status,
-                'page' => $page,
-                'limit' => $limit,
-            ],
+            'request' => $request,
             'pagination' => [
                 'total' => $total,
-                'current' => $page ?? 1,
-                'per_page' => $limit,
-                'total_pages' => ceil($total / $limit),
+                'current' => $request['page'],
+                'per_page' => $request['limit'],
+                'total_pages' => ceil($total / $request['limit']),
             ],
             'data' => iterator_to_array($this->formatCustomers($customers)),
         ];
@@ -121,8 +124,31 @@ class CustomersPresenter extends ApiPresenter
     {
         return [
             'links' => [
-                'self' => $this->link('Customers:Details:index', ['id' => $customer->public_id, 'version' => $this->version]),
+                'self' => $this->link('Customers:Details:', ['id' => $customer->public_id]),
             ],
         ];
+    }
+
+    /**
+     * 
+     * @param array{q:string,status:?string,page:int,limit:int} $request
+     * 
+     * @return void
+     * 
+     * @throws ValidationException
+     */
+    private function validateParams(array $request): void
+    {
+        if ($request['page'] < 1) {
+            throw new ValidationException('Page must be greater than 0');
+        }
+
+        if ($request['limit'] < 1 || $request['limit'] > self::MAX_PAGE_SIZE) {
+            throw new ValidationException('Limit must be between 1 and ' . self::MAX_PAGE_SIZE);
+        }
+
+        if ($request['status'] && !CustomerStatus::isValid($request['status'])) {
+            throw new ValidationException('Invalid status value');
+        }
     }
 }

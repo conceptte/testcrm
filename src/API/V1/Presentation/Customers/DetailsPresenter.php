@@ -22,7 +22,7 @@ class DetailsPresenter extends ApiPresenter
      * 
      * @return void
      */
-    public function actionIndex(string $id): void
+    public function actionDefault(string $id): void
     {
         try {
             if (!$customer = $this->customerRepository->byPublicId($id)) {

@@ -7,9 +7,11 @@
                 <span class="avatar">{$customer->name|substr:0,2}</span>
             </a>
             <span class="title">{$customer->name}</span>
-
             <span n:class="status, $customer->is_active ? 'is-active' : 'is-inactive'">
                 {$customer->is_active ? 'Active' : 'Inactive'}
+            </span>
+            <span class="api-links">
+                <a href="{link :MiniCRMAPIV1:Customers:Details:, id => $customer->public_id}" target="_blank" class="api-link is-compact">API</a>
             </span>
             <div>
                 <span class="email">{$customer->email}</span>

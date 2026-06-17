@@ -16,21 +16,21 @@ final class ApiRouteFactory
      */
     public static function create(): RouteList
     {
-        $router = new RouteList();
+        $router = new RouteList('MiniCRMAPIV1');
         
-        $router->addRoute('minicrm/api/<version>/ping', [
+        $router->addRoute('minicrm/api/v1/ping', [
             'presenter' => 'Ping',
             'action' => 'pong',
         ]);
 
-        $router->addRoute('minicrm/api/<version>/customers', [
+        $router->addRoute('minicrm/api/v1/customers', [
             'presenter' => 'Customers',
-            'action' => 'index',
+            'action' => 'default',
         ]);
 
-        $router->addRoute('minicrm/api/<version>/customers/<id>', [
+        $router->addRoute('minicrm/api/v1/customers/<id>', [
             'presenter' => 'Customers:Details',
-            'action' => 'index',
+            'action' => 'default',
         ]);
 
         return $router;

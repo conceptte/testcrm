@@ -34,6 +34,13 @@
             </select>
         </form>
     </div>
+    <div n:snippet="apiControls" class="api">
+        <a href="{link :MiniCRMAPIV1:Customers: q: $q, status: $status, page: $page, limit: $limit}" target="_blank" class="api-link is-compact"
+            title="API link for current view"
+        >
+            API
+        </a>
+    </div>
 </div>
 <div n:snippet="customersList" class="customer-list">
     <div n:if="$totalCount === 0" class="empty-state">
