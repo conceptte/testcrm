@@ -1,4 +1,8 @@
 <?php
+
+use Mtr\MiniCRM\API\V1\Request\CustomersRequestFactory;
+use Mtr\MiniCRM\API\V1\Resource\Customers\CustomerCollectionResourceFactory;
+use Mtr\MiniCRM\API\V1\Resource\Customers\CustomerResourceFactory;
 use Nette\Utils\Paginator;
 use Mtr\MiniCRM\Presentation\Components\Pagination\PaginationControl;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
@@ -29,6 +33,10 @@ return [
                 'type' => CommentsRepositoryInterface::class,
                 'create' => CommentsRepository::class,
             ],
+
+            'minicrm.api.v1.request.customers.requestFactory' => CustomersRequestFactory::class,
+            'minicrm.api.v1.resource.customers.resourceFactory' => CustomerResourceFactory::class,
+            'minicrm.api.v1.resource.customers.collectionResourceFactory' => CustomerCollectionResourceFactory::class,
         ],
     ],
 ];

@@ -3,7 +3,7 @@ namespace Mtr\MiniCRM\API\V1\Resource;
 
 use JsonSerializable;
 
-class PaginatorResource implements JsonSerializable
+readonly class PaginatorResource implements ResourceInterface
 {
     public function __construct(
         private int $total,
@@ -11,8 +11,7 @@ class PaginatorResource implements JsonSerializable
         private int $perPage,
         private int $totalPages
     )
-    {
-    }
+    {}
 
     /**
      * @return array<string, int>
@@ -24,6 +23,6 @@ class PaginatorResource implements JsonSerializable
             'current' => $this->current,
             'per_page' => $this->perPage,
             'total_pages' => $this->totalPages,
-        ]; 
+        ];
     }
 }

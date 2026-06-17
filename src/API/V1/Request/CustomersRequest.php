@@ -1,13 +1,11 @@
 <?php
 namespace Mtr\MiniCRM\API\V1\Request;
 
-use JsonSerializable;
 use Mtr\MiniCRM\API\V1\Exception\ValidationException;
 use Mtr\MiniCRM\Repository\Customers\CustomerStatus;
 
-class CustomersRequest implements JsonSerializable
+readonly class CustomersRequest implements RequestInterface
 {
-    private const MAX_PAGE_SIZE = 100;
 
     public function __construct(
         public readonly string $query = '',
@@ -15,7 +13,6 @@ class CustomersRequest implements JsonSerializable
         public readonly int $page = 1,
         public readonly int $limit = 10,
     ) {
-        
     }
 
     /**
@@ -45,7 +42,6 @@ class CustomersRequest implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return (array) get_object_vars($this);
+        return (array) $this;
     }
-
 }

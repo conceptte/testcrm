@@ -250,42 +250,40 @@ Response includes customer list and meta info:
 {
   "success": true,
   "request": {
-    "q": "",
+    "query": "wi",
     "status": "active",
     "page": 1,
     "limit": 2
   },
   "pagination": {
-    "total": 51,
+    "total": 8,
     "current": 1,
     "per_page": 2,
-    "total_pages": 26
+    "total_pages": 4
   },
   "data": [
     {
-      "id": "c6a30f25d0f3bd",
-      "name": "Daija Daniel",
-      "email": "jherman@example.net",
+      "name": "Willie Wintheiser",
+      "email": "orrin00@example.com",
       "is_active": true,
       "totals": {
-        "total_activities": 15,
-        "total_comments": 265
+        "total_activities": 5,
+        "total_comments": 84
       },
-      "links": {
-        "self": "/minicrm/api/v1/customers/c6a30f25d0f3bd"
+      "meta": {
+        "uri": "/minicrm/api/v1/customers/c6a31710e4a06c"
       }
     },
     {
-      "id": "c6a30f25da72c8",
-      "name": "Bette Satterfield",
-      "email": "juana.ernser@example.net",
+      "name": "Vivienne Lesch",
+      "email": "gwilderman@example.org",
       "is_active": true,
       "totals": {
-        "total_activities": 44,
-        "total_comments": 738
+        "total_activities": 5,
+        "total_comments": 79
       },
-      "links": {
-        "self": "/minicrm/api/v1/customers/c6a30f25da72c8"
+      "meta": {
+        "uri": "/minicrm/api/v1/customers/c6a317100cd264"
       }
     }
   ]
