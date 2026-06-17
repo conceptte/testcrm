@@ -13,7 +13,7 @@ readonly class CustomerResource implements ResourceInterface
      */
     public function __construct(
         private ActiveRow $customer,
-        private array $meta = []
+        private ?array $meta = null
     ) {}
 
     /**
@@ -23,12 +23,13 @@ readonly class CustomerResource implements ResourceInterface
     {
         return
             [
+                'id' => $this->customer->public_id,
                 'name' => $this->customer->name,
                 'email' => $this->customer->email,
                 'is_active' => $this->customer->is_active ? true : false,
-                'totals' => [
-                    'total_activities' => $this->customer->activities_count ?? 'N/A',
-                    'total_comments' => $this->customer->comments_count ?? 'N/A',
+                'total' => [
+                    'activities' => $this->customer->activities_count ?? 'N/A',
+                    'comments' => $this->customer->comments_count ?? 'N/A',
                 ]
             ] 
             + ['meta' => $this->meta];

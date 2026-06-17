@@ -4,14 +4,16 @@ namespace Mtr\MiniCRM\API\V1\Presentation\Customers;
 use Mtr\MiniCRM\API\V1\Exception\ApiExceptionInterface;
 use Mtr\MiniCRM\API\V1\Exception\NotFoundException;
 use Mtr\MiniCRM\API\V1\Presentation\ApiPresenter;
-use Mtr\MiniCRM\API\V1\Resource\CustomerResource;
+use Mtr\MiniCRM\API\V1\Resource\Customers\CustomerResourceFactory;
+use Mtr\MiniCRM\API\V1\Resource\ResourceInterface;
 use Mtr\MiniCRM\Repository\Customers\CustomersRepositoryInterface;
 use Throwable;
 
 class DetailsPresenter extends ApiPresenter
 {
     public function __construct(
-        private CustomersRepositoryInterface $customerRepository
+        private CustomersRepositoryInterface $customerRepository,
+        private CustomerResourceFactory $customerResourceFactory
     )
     {}
 
@@ -25,13 +27,9 @@ class DetailsPresenter extends ApiPresenter
     public function actionDefault(string $id): void
     {
         try {
-            if (!$customer = $this->customerRepository->byPublicId($id)) {
-                throw new NotFoundException('Customer not found');
-            }
-
             $apiData = [
-                'success' => true,
-                'data' => CustomerResource::fromRow($customer),
+                "success" => true,
+                "data" => $this->getCusomerData($id)
             ];
 
         } catch (ApiExceptionInterface $e) {
@@ -40,10 +38,25 @@ class DetailsPresenter extends ApiPresenter
 
         } catch (Throwable $e) {
 
-            $apiData = $this->errorData();
+            $apiData = $this->errorData($e->getMessage());
         }
 
         $this->sendJson($apiData);
+    }
+
+    /**
+     * @param string $id
+     * 
+     * @return ResourceInterface
+     * @throws NotFoundException
+     */
+    private function getCusomerData(string $id): ResourceInterface
+    {
+        if (!$customer = $this->customerRepository->byPublicId($id)) {
+                throw new NotFoundException('Customer not found');
+        }
+
+        return $this->customerResourceFactory->createResource($customer);
     }
 
     

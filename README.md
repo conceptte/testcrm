@@ -250,40 +250,42 @@ Response includes customer list and meta info:
 {
   "success": true,
   "request": {
-    "query": "wi",
-    "status": "active",
+    "query": "wil",
+    "status": "inactive",
     "page": 1,
     "limit": 2
   },
   "pagination": {
-    "total": 8,
+    "total": 3,
     "current": 1,
     "per_page": 2,
-    "total_pages": 4
+    "total_pages": 2
   },
   "data": [
     {
-      "name": "Willie Wintheiser",
-      "email": "orrin00@example.com",
-      "is_active": true,
-      "totals": {
-        "total_activities": 5,
-        "total_comments": 84
+      "id": "c6a3170ff6d609",
+      "name": "Willie Cummerata",
+      "email": "bennie.dooley@example.net",
+      "is_active": false,
+      "total": {
+        "activities": 28,
+        "comments": 393
       },
       "meta": {
-        "uri": "/minicrm/api/v1/customers/c6a31710e4a06c"
+        "uri": "/minicrm/api/v1/customers/c6a3170ff6d609"
       }
     },
     {
-      "name": "Vivienne Lesch",
-      "email": "gwilderman@example.org",
-      "is_active": true,
-      "totals": {
-        "total_activities": 5,
-        "total_comments": 79
+      "id": "c6a317135e4bce",
+      "name": "Prof. Bell Wilkinson",
+      "email": "ruth.kuphal@example.net",
+      "is_active": false,
+      "total": {
+        "activities": 29,
+        "comments": 510
       },
       "meta": {
-        "uri": "/minicrm/api/v1/customers/c6a317100cd264"
+        "uri": "/minicrm/api/v1/customers/c6a317135e4bce"
       }
     }
   ]
@@ -300,16 +302,16 @@ Response includes customer info and some metadata:
 {
   "success": true,
   "data": {
-    "id": "c6a30f25d0f3bd",
-    "name": "Daija Daniel",
-    "email": "jherman@example.net",
-    "is_active": true,
-    "totals": {
-      "total_activities": 15,
-      "total_comments": 265
-    }
-  },
-  "meta": []
+    "id": "c6a3170ff6d609",
+    "name": "Willie Cummerata",
+    "email": "bennie.dooley@example.net",
+    "is_active": false,
+    "total": {
+      "activities": 28,
+      "comments": 393
+    },
+    "meta": []
+  }
 }
 ```
 
