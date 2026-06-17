@@ -108,7 +108,39 @@ php vendor/conceptte/minicrm/database/seed.php  # optional - adds test data
 Extension configuration is done in `config/minicrm.php`
 
 I decided to use PHP for configuration instead of NEON because it allows for more flexibility (and Nette supports it). You can easily swap out implementations or use real classes without needing a separate DI container configuration.
+```php
+$mapiv1 = 'minicrm.api.v1';
 
+return [
+    'minicrm' => [
+        'mapping' => [
+            'MiniCRM' => 'Mtr\MiniCRM\Presentation\*\*Presenter',
+            'MiniCRMAPIV1' => 'Mtr\MiniCRM\API\V1\Presentation\*\*Presenter',
+        ],
+        'services' => [
+            'paginator' => Paginator::class,
+            'paginationControl' => PaginationControl::class,
+            'customersRepository' =>[
+                'type' => CustomersRepositoryInterface::class,
+                'create' => CustomersRepository::class,
+            ],
+            'activityRepository' => [
+                'type' => ActivityRepositoryInterface::class,
+                'create' => ActivityRepository::class,
+            ],
+            'commentsRepository' => [
+                'type' => CommentsRepositoryInterface::class,
+                'create' => CommentsRepository::class,
+            ],
+
+            "{$mapiv1}.request.customers.requestFactory" => CustomersRequestFactory::class,
+            "{$mapiv1}.resource.customers.resourceFactory" => CustomerResourceFactory::class,
+            "{$mapiv1}.resource.customers.collectionResourceFactory" => CustomerCollectionResourceFactory::class,
+            "{$mapiv1}.resource.paginator.resourceFactory" => PaginatorResourceFactory::class,
+        ],
+    ],
+];
+```
 
 ### Routes:
 
