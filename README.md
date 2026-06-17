@@ -88,47 +88,24 @@ php vendor/conceptte/minicrm/database/seed.php  # optional - adds test data
 ### Basic simple structure:
 
 ```
+├── assets/                   # CSS and JS files
 ├── config/                   # Extension configuration
 ├── database/                 # SQL schema and seed data
 ├── src/
+    ├── API/V1/               # JSON endpoints
+        ├── Presentation/     # API presenters
+        ├── Request/          # Request DTOs
+        ├── Resource/         # API resources
     ├── Exception/            # Custom exceptions
     ├── Routing/              # Where routes are defined
     ├── Presentation/         # Pages and forms
     ├── Repository/           # Gets data from database
-    ├── API/V1/               # JSON endpoints
     ├── MiniCRMExtension.php  # Main extension class
     ├── ConfigNodes.php       # Enum for config keys
 ```
 
 ## Configuration
-Extension configuration is done in `config/minicrm.php`:
-    
-```php
-return [
-    'minicrm' => [
-        'mapping' => [
-            'MiniCRM' => 'Mtr\MiniCRM\Presentation\*\*Presenter',
-            'MiniCRMAPI' => 'Mtr\MiniCRM\API\V1\Presentation\*\*Presenter',
-        ],
-        'services' => [
-            'paginator' => Paginator::class,
-            'paginationControl' => PaginationControl::class,
-            'customersRepository' =>[
-                'type' => CustomersRepositoryInterface::class,
-                'create' => CustomersRepository::class,
-            ],
-            'activityRepository' => [
-                'type' => ActivityRepositoryInterface::class,
-                'create' => ActivityRepository::class,
-            ],
-            'commentsRepository' => [
-                'type' => CommentsRepositoryInterface::class,
-                'create' => CommentsRepository::class,
-            ],
-        ],
-    ],
-];
-```
+Extension configuration is done in `config/minicrm.php`
 
 I decided to use PHP for configuration instead of NEON because it allows for more flexibility (and Nette supports it). You can easily swap out implementations or use real classes without needing a separate DI container configuration.
 
@@ -156,35 +133,6 @@ public static function create(): RouteList
 - `/minicrm/customers` - Customer list page (search, filter, sort)
 - `/minicrm/customers/{public_id}` - Customer details page (activities and history)
 - `/minicrm/customers/{public_id}/activity/{id}` - Activity page (view details and comments)
-```php
-public static function create(): RouteList
-{
-    $router = new RouteList();
-
-    $router->addRoute('minicrm[/customers]', [
-        'presenter' => 'Customers',
-        'action' => 'index',
-    ]);
-
-    $router->addRoute('minicrm/customers/quick-search', [
-            'presenter' => 'Customers:QuickSearch',
-            'action' => 'default',
-        ]);
-
-    $router->addRoute('minicrm/customers/<id>', [
-        'presenter' => 'Customers:Details',
-        'action' => 'view',
-    ]);
-
-    $router->addRoute('minicrm/customers/<id>/activity/<activity>', [
-        'presenter' => 'Customers:Activity',
-        'action' => 'view',
-    ]);
-
-    return $router;
-}
-
-```
 
 
 ### API routes group:
@@ -192,29 +140,6 @@ public static function create(): RouteList
 - `/minicrm/api/v1/customers` - API to get customer data as JSON
 - `/minicrm/api/v1/customers/{public_id}` - API to get single customer details as JSON
 
-```php
-public static function create(): RouteList
-{
-    $router = new RouteList();
-    
-    $router->addRoute('minicrm/api/<version>/ping', [
-        'presenter' => 'Ping',
-        'action' => 'pong',
-    ]);
-
-    $router->addRoute('minicrm/api/<version>/customers', [
-        'presenter' => 'Customers',
-        'action' => 'index',
-    ]);
-
-    $router->addRoute('minicrm/api/<version>/customers/<id>', [
-        'presenter' => 'Customers:Details',
-        'action' => 'index',
-    ]);
-
-    return $router;
-}
-```
 
 ## Database tables
 [schema.sql](database/schema.sql) defines tables:
@@ -236,7 +161,6 @@ I investigated and used native Nette functionality like:
 Presenters use repository services, pagination control as dependencies injected by Nette DI container.
 
 ## Repository layer
-Repositories are defined as interfaces and implemented in `src/Repository/`. 
 They provide methods to get data from the database and are used by presenters and API endpoints.
 Registered as services in extension config, so they can be injected and swapped if needed.
 
