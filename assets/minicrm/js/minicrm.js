@@ -1,7 +1,4 @@
-{block pageScripts}
-<script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
-<script>
-    MiniCRM = {
+ MiniCRM = {
         initialize: function() {
             this.initFlashMessages();
         },
@@ -70,5 +67,3 @@
         naja.initialize();
         MiniCRM.initialize();
     });
-</script>
-{/block}

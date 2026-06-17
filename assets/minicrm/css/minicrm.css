@@ -1,6 +1,4 @@
-{block pageStyle}
-<style>
-    /** Global styles */
+/** Global styles */
     :root {
         --bg: #f3f6fb;
         --bg-soft: #eaf0f8;
@@ -772,7 +770,3 @@
             }
         }
     }
-</style>
-
-
-{/block}

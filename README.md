@@ -35,7 +35,7 @@ That gives a few clear benefits:
 - host app can replace services by interface without editing core package code.
 
 Main gap of extension in current version:
-- Asset pipeline is limited: styles are kept in Latte layout blocks, not in fully separate built assets.
+- (`fixed by custom copying assets files`) Asset pipeline is limited: styles are kept in Latte layout blocks, not in fully separate built assets.
 - Sorting and filtering is basic, no complex queries or UI for that.
 - No rate limiting or other protections for API endpoints.
 - Error handling is basic, just showing messages without logging or detailed responses.
@@ -68,7 +68,13 @@ extensions:
 $router->add(\Mtr\MiniCRM\Routing\RouterFactory::create());
 ```
 
-4. Create and seed database:
+4. Add assets to `www/assets` (temporary solution, should be improved in future):
+
+```bash
+mkdir -p www/assets && cp -r vendor/conceptte/minicrm/assets/minicrm www/assets/minicrm
+```
+
+5. Create and seed database:
 
 ```bash
 php vendor/conceptte/minicrm/database/schema.php

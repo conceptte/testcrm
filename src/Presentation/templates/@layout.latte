@@ -5,14 +5,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>{ifset title}{include title|stripHtml} | {/ifset}MiniCRM</title>
-
-	{asset? 'main.js'}
-
 	<script src="https://unpkg.com/nette-forms@3"></script>
-	{import layout.js.latte}
-	{import layout.css.latte}
-	{include pageScripts}
-	{include pageStyle}
+	<script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
+	<script type="text/javascript">
+		naja.initialize();
+	</script>
+	
+	{asset? 'main.js'}
+	{asset 'minicrm/css/minicrm.css'}
+	{asset 'minicrm/js/minicrm.js'}
+
+	
 </head>
 
 <body>
