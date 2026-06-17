@@ -10,7 +10,7 @@
         <form action="{link this, page: 1}" class="ajax search-form">
             <input id="quick-search" type="search" name="q" value="{$q}" placeholder="Search by name or email" aria-label="Search by name or email">
             <button type="submit">Search</button>
-            <a n:if="$q" href="{link this, page: null, q: null}" class="clear">Clear</a>
+            <a n:if="$q" href="{link this, page: null, q: null}" class="clear ajax">Clear</a>
             <div id="search-suggestions" 
                 data-url="{link :MiniCRM:Customers:QuickSearch:default}"
                 class="search-suggestions">
