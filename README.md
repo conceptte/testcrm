@@ -107,7 +107,17 @@ php vendor/conceptte/minicrm/database/seed.php  # optional - adds test data
 ## Configuration
 Extension configuration is done in `config/minicrm.php`
 
-I decided to use PHP for configuration instead of NEON because it allows for more flexibility (and Nette supports it). You can easily swap out implementations or use real classes without needing a separate DI container configuration.
+I decided to use PHP for configuration instead of NEON because it allows for more flexibility 
+And Nette supports it :
+`src/MiniCRMExtension.php`:
+```php
+public function loadConfiguration(): void
+{        
+    $this->extConfig = $this->loadFromFile(__DIR__ . '/../config/minicrm.php') ?? [];
+}
+```
+
+You can easily swap out implementations or use real classes without needing a separate DI container configuration.
 ```php
 $mapiv1 = 'minicrm.api.v1';
 
