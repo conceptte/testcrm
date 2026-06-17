@@ -1,5 +1,5 @@
 {block content}
-<div n:block=title class="page-title">Customers <em n:snippet="totalCount">({$totalCount})</em></div>
+<div n:block=title class="page-title">Customers <span n:snippet="totalCount">({$totalCount})</span></div>
 <div class="filters">
     <div n:snippet="statusControls" class="status">
         <a n:href="this, page: null, status: null" n:class="ajax, chip, $status === null ? 'is-active'">All</a>
@@ -29,8 +29,8 @@
             <select id="sort" name="sort" onchange="this.form.requestSubmit()">
                 <option value="a-z" selected={$sort === 'a-z' || $sort === null}>A-Z</option>
                 <option value="z-a" selected={$sort === 'z-a'}>Z-A</option>
-                <option value="active_first" selected={$sort === 'active_first'}>Active first</option>
-                <option value="active_last" selected={$sort === 'active_last'}>Active last</option>
+                <option value="activity_count" selected={$sort === 'activity_count'}>Activity</option>
+                <option value="comments_count" selected={$sort === 'comments_count'}>Comments</option>
             </select>
         </form>
     </div>

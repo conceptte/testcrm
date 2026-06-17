@@ -118,8 +118,8 @@ class CustomersRepository implements CustomersRepositoryInterface
         return match ($sort) {
             'a-z' => self::TABLE_NAME . '.name ASC',
             'z-a' => self::TABLE_NAME . '.name DESC',
-            'active_first' => self::TABLE_NAME . '.is_active DESC, ' . self::TABLE_NAME . '.name ASC',
-            'active_last' => self::TABLE_NAME . '.is_active ASC, ' . self::TABLE_NAME . '.name ASC',
+            'activity_count' => 'activities_count DESC, ' . self::TABLE_NAME . '.name ASC',
+            'comments_count' => 'comments_count DESC, ' . self::TABLE_NAME . '.name ASC',
             default => self::TABLE_NAME . '.name DESC',
         };
     }
